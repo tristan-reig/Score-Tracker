@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Row from '../components/Row';
 import axios from 'axios';
 
+const position_array = ["top","jun","mid","adc","sup"]
+
 const Table = (props) => {
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -9,6 +11,7 @@ const Table = (props) => {
             try {
                 const options = {
                     method: 'GET',
+                    mode: 'no-cors',
                     url: 'https://api.pandascore.co/teams/' + props.id,
                     params: {
                         'filter[videogame_id]': '1',
@@ -18,10 +21,9 @@ const Table = (props) => {
                     },
                     headers: {
                         accept: 'application/json',
-                        authorization: 'Bearer Q0M8YQQnX_dj9uWxuaKdP93i_cQYuh7IgA0gENLy7fu8bgXiVUk'
+                        authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
                     }
                 };
-
                 const response = await axios.request(options);
                 setData(response.data);
             } catch (error) {
@@ -34,12 +36,11 @@ const Table = (props) => {
     if (!data) {
         return <div className='loading loading-ring loading-lg'></div>;
     }
-    console.log(data)
 
     return (
         <div className="relative overflow-x-auto rounded-lg p-5">
             <table className="w-full text-sm text-left">
-                <thead className={`text-xs text-gray-700 ${props.color}`}>
+                <thead className={`text-xs text-gray-700 ${props.bg_color}`}>
                     <tr className="align-items">
                         <th scope='col'>
                             <img src={data.image_url} className='w-16 h-16 mx-auto' alt="" />
@@ -50,25 +51,23 @@ const Table = (props) => {
                         </th>
                     </tr>
                 </thead>
-                <thead className="text-xs bg-pink-300 text-gray-700 border-t border-t-4 border-black">
+                <thead className={`text-xs ${props.bg_color} border-t border-t-4 border-black`}>
                     <tr className='text-center'>
-                        <th scope="col" className="px-6 py-3 text-lg border-r-4 border-black">
+                        <th scope="col" className="px-6 py-3 text-lg border-r-4 text-gray-800 border-black">
                             Poste
                         </th>
-                        <th scope="col" className="px-6 py-3 text-lg border-r-4 border-black">
+                        <th scope="col" className="px-6 py-3 text-lg border-r-4 text-gray-800 border-black">
                             2023
                         </th>
-                        <th scope="col" className="px-6 py-3 text-lg">
+                        <th scope="col" className="px-6 py-3 text-lg text-gray-800">
                             2024
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <Row position="Top" old_player="Adam" new_player="Adam" />
-                    <Row position="Jungle" old_player="Sheo" new_player="Sheo" />
-                    <Row position="Mid" old_player="Nuc" new_player="Nuc" />
-                    <Row position="Adc" old_player="Crownie" new_player="" />
-                    <Row position="Support" old_player="Labrov" new_player="Labrov" />
+                {position_array.map((_, index) => (
+                    <Row key={index} index={props.index} team={props.team} bg_color={props.bg_color} players={data.players} position={position_array[index]} />
+                ))}
                 </tbody>
             </table>
         </div>

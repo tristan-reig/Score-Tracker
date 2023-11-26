@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Mercato from "./pages/Mercato";
+import Test from "./pages/Test";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/mercato" element={<Layout />}>
           <Route index element={<Mercato />}/>
         </Route>
+        <Route path="/test" element={<Test />}/>
       </Routes>
     </BrowserRouter>
   );
