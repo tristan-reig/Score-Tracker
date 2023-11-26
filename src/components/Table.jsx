@@ -11,7 +11,6 @@ const Table = (props) => {
             try {
                 const options = {
                     method: 'GET',
-                    mode: 'no-cors',
                     url: 'https://api.pandascore.co/teams/' + props.id,
                     params: {
                         'filter[videogame_id]': '1',
@@ -27,7 +26,7 @@ const Table = (props) => {
                 const response = await axios.request(options);
                 setData(response.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                fetchData()
             }
         };
         fetchData();

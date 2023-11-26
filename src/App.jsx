@@ -3,6 +3,7 @@ import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Mercato from "./pages/Mercato";
 import Test from "./pages/Test";
+import Search from "./pages/Search";
 
 export default function App() {
   return (
@@ -13,6 +14,9 @@ export default function App() {
         </Route>
         <Route path="/mercato" element={<Layout />}>
           <Route index element={<Mercato />}/>
+        </Route>
+        <Route path="/search" element={<Layout />}>
+          <Route index element={<Search />}/>
         </Route>
         <Route path="/test" element={<Test />}/>
       </Routes>

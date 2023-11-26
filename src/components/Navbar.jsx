@@ -11,7 +11,9 @@ const Navbar = () => {
             </div>
         </div>
         <div className="navbar-center">
-            <input type="text" placeholder="Chercher une équipe, un joueur..." className="input input-bordered block rounded-md w-96 focus:outline-none focus:border-" />
+            <form action="/search">
+                <input name="query" type="text" placeholder="Chercher une équipe, un joueur..." className="input input-bordered block rounded-md w-96 focus:outline-none" />
+            </form>
         </div>
         <div className="navbar-end">
             <label className="btn btn-ghost btn-circle swap swap-rotate">  
