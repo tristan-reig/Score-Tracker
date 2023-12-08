@@ -4,11 +4,17 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    {pattern: /bg-(red|green|emerald|blue|yellow|orange|gray|pink)-(100|200|300|400|500|600|700|800|900)/},
+    {pattern: /mt-(1|2|3|4|5|6|7|8|9|10)4/}
+  ],
   theme: {
-    extend: {},
-  },
-  variants: {
-    width: ["responsive", "hover", "focus"]
+    extend: {
+      fontFamily: {
+        'title' : ["Gobold Thin"],
+        'pseudo' : ["Industry Bold"]
+      }
+    },
   },
   // eslint-disable-next-line no-undef
   plugins: [require("daisyui")],

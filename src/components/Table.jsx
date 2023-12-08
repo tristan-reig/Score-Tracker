@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import Row from '../components/Row';
 import axios from 'axios';
-
-const position_array = ["top","jun","mid","adc","sup"]
+import { Link } from 'react-router-dom'
 
 const Table = (props) => {
+    const position_array = ["top","jun","mid","adc","sup"]
     const [data, setData] = useState(null);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -37,7 +38,7 @@ const Table = (props) => {
     }
 
     return (
-        <div className="relative overflow-x-auto rounded-lg p-5">
+        <div className="relative overflow-hidden rounded-lg p-5">
             <table className="w-full text-sm text-left">
                 <thead className={`text-xs text-gray-700 ${props.bg_color}`}>
                     <tr className="align-items">
@@ -45,8 +46,8 @@ const Table = (props) => {
                             <img src={data.image_url} className='w-16 h-16 mx-auto' alt="" />
                         </th>
                         <th></th>
-                        <th scope="col" className="mx-auto text-2xl text-gray-800">
-                            {props.team}
+                        <th scope="col" className="mx-auto text-2xl mr-2 text-gray-800 hover:underline cursor-pointer">
+                            <Link to={`/search?query=${props.id}`}>{props.team}</Link>
                         </th>
                     </tr>
                 </thead>
@@ -65,7 +66,7 @@ const Table = (props) => {
                 </thead>
                 <tbody>
                 {position_array.map((_, index) => (
-                    <Row key={index} index={props.index} team={props.team} bg_color={props.bg_color} players={data.players} position={position_array[index]} />
+                    <Row league={props.league} id={props.id} key={index} index={props.index} team={props.team} bg_color={props.bg_color} players={data.players} position={position_array[index]} />
                 ))}
                 </tbody>
             </table>

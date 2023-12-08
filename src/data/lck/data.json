@@ -1,0 +1,29 @@
+{
+    "colors": ["bg-red-800", "bg-yellow-800", "bg-yellow-500", "bg-blue-300", "bg-green-400", "bg-gray-400", "bg-yellow-500", "bg-yellow-500", "bg-red-700", "bg-blue-500"],
+    "ids" : [126061, 2882, 63, 132531, 128218, 2883, 130063, 75013, 128217, 126370],
+    "teams" : ["T1", "GenG", "KT Rolster", "DPlus Kia", "OK MAN BRION", "Hanwha Life Esports", "Kwangdong Freecs", "Liiv Sandbox", "NS REDFORCE", "DRX"],
+    "new_players" : [
+        {}, 
+        {"top" : "Kiin", "jun" : "Canyon", "sup" : "Lehends"}, 
+        {}, 
+        {"top" : "Kingen", "jun" : "Lucid", "adc" : "Aiming"}, 
+        {}, 
+        {}, 
+        {}, 
+        {}, 
+        {"adc" : "Jiwoo"}, 
+        {"sup" : "Pleata"}
+    ],
+    "official_teams" : ["T1", "GenG", "KT Rolster", "DPlus Kia", "OK MAN BRION", "Hanwha Life Esports", "Liiv Sandbox", "DRX"],
+    "out_players" : [""],
+    "missing_players" : [
+        {}, 
+        {"top" : "Doran", "jun" : "Peanut", "sup" : "Delight"},
+        {"top" : "Kiin", "jun" : "Cuzz", "adc" : "Aiming", "sup": "Lehends"}, 
+        {"adc" : "Deft"}, {}, {"top" : "Kingen", "jun" : "Grizzly", "sup" : "Life"}, 
+        {}, 
+        {}, 
+        {"adc" : "Jiwoo"}, 
+        {"jun" : "Croco", "sup" : "Beryl"}
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "colors": ["bg-yellow-200", "bg-pink-300", "bg-gray-900", "bg-pink-800", "bg-green-400", "bg-blue-600", "bg-gray-900", "bg-blue-400", "bg-red-700", "bg-yellow-600"],
+    "ids": [132529, 130005, 130383, 126750, 133115, 128268, 1449, 132417, 131000, 126204],
+    "teams" : ["Aegis", "BDS Academy", "BK ROG", "Gameward", "Gentle Mates","KCP", "Solary", "Team Du Sud", "Team GO", "Vitality Bee"],
+    "new_players" : [{"top" : "Agresivoo", "jun" : "Ryuzaki", "mid" : "Nafkzlah", "adc" : "Hid0", "sup" : "Veignorem"}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+    "official_teams" : [],
+    "out_players" : ["Lot", "Skewmond", "Eika", "Shiganari", "Hantera"],
+    "missing_players" : [{"jun" : "Skewmond", "mid" : "Eika", "adc" : "Shiganari"}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+}
