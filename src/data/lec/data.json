@@ -1,9 +1,0 @@
-{
-    "colors": ["bg-pink-300", "bg-emerald-800", "bg-orange-400", "bg-red-800", "bg-gray-600", "bg-blue-600", "bg-yellow-800", "bg-gray-100", "bg-yellow-300", "bg-blue-800"],
-    "ids": [128267, 2721, 394, 88, 130105, 128268, 126536, 395, 115, 3983],
-    "teams" : ["BDS", "Excel", "Fnatic", "G2", "Heretics","Karmine Corp", "MAD Lions", "SK Gaming", "Vitality", "Rogue"],
-    "new_players" : [{"adc" : "Ice"},{"mid" : "Jackies", "adc" : "Patrik", "sup" : "Ignar"},{"sup" : "Jun"},{},{"top" : "Wunder","mid" : "Perkz","sup" : "Kaiser"},{"top" : "Cabochard","jun" : "Bo","mid" : "Saken","adc" : "Upset","sup" : "Targamas"},{"top" : "Myrwn","mid" : "Fresskowy","adc" : "Supa","sup" : "Alvaro"},{"jun" : "Isma","mid" : "Nisqy"},{"jun" : "Daglas","mid" : "Véthéo","adc" : "Carzzy","sup" : "Hylissang"}, {"jun" : "Markoon", "sup" : "Zoelys"}],
-    "official_teams" : ["G2", "Fnatic", "Heretics"],
-    "out_players" : ["Trymbi", "Mersa", "Bo", "Perkz", "Upset", "Kaiser", "Markoon", "Sertuss", "Crownie", "Chasy"],
-    "missing_players" : [{},{"mid" : "Abbedagge", "adc" : "Patrik", "sup" : "LIMIT"},{},{},{"top" : "Evi", "mid" : "Vetheo"},{},{"adc" : "Carzzy"},{},{"sup" : "Kaiser"}, {"jun" : "Malrang"}]
-}

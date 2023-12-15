@@ -1,22 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const Test = () => {
-  const [variableJs, setVariableJs] = useState('');
+function Test() {
+  const [request, setRequest] = useState(0);
 
   useEffect(() => {
-    fetch('/api/data')
-      .then(response => response.json())
-      .then(data => {
-        setVariableJs(data.variable_python);
-      })
-      .catch(error => console.error('Erreur de requête API:', error));
+    fetch('http://localhost:5000/clubs').then(res => res.json()).then(data => setRequest(data))
   }, []);
 
-  console.log(variableJs)
+  if (request) {
+    console.log(request[0])
+  }
 
   return (
-    <div>{variableJs}</div>
-  )
+    <div>Test</div>
+  );
 }
 
-export default Test
+export default Test;

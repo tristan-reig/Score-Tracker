@@ -13,10 +13,6 @@ const Navbar = () => {
             <form action="/search">
                 <div className="join">
                     <input name="query" type="text" placeholder="Chercher une équipe, un joueur..." className="input input-bordered block rounded-md w-96 focus:outline-none" />
-                    <select defaultValue="Filter" className="select select-bordered join-item focus:outline-none">
-                        <option>Esports</option>
-                        <option>Sports</option>
-                    </select>
                 </div>
             </form>
         </div>

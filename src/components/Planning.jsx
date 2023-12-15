@@ -1,7 +1,6 @@
 import { startOfWeek, addDays, format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import Event from './Event';
-import Lec from '../assets/lec-2019.avif'
 
 const Planning = () => {
   const startOfWeekDate = startOfWeek(new Date(), {weekStartsOn: 1});
@@ -31,11 +30,11 @@ const Planning = () => {
         </thead>
         <tbody>
           <tr className="flex flex-row align-items justify-between">
-            {daysOfWeek.map((_, index) => (
+            {/* {daysOfWeek.map((_, index) => (
               <th className='border-x w-full h-[75vh]' key={index}>
                 {index === 1 && (<Event image={Lec} begin={14} duration={3} title={"Test"} />)}
               </th>
-            ))}
+            ))} */}
           </tr>
         </tbody>
       </table>
