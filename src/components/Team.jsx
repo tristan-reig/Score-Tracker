@@ -37,9 +37,10 @@ const Team = (props) => {
     var secondPart = props.data.players.slice(midIndex);
   }
 
+
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < data[i].series.length; j++) {
-      if (data[i].series[j].end_at.split('-')[0] == "2023" && !current_leagues.includes(data[i].image_url)) {
+      if (data[i].series[j].end_at?.split('-')[0] == "2023" && !current_leagues.includes(data[i].image_url)) {
         current_leagues.push(data[i].image_url)
       }
     }
@@ -57,7 +58,7 @@ const Team = (props) => {
         </div>
         <div className="bg-gray-700 py-2 text-xl items-center justify-evenly flex flex-row">
           {current_leagues.map((league, index) => 
-            <img key={index} className="w-16 h-16" src={league} alt="" />
+            <img key={index} className="w-lg h-16" src={league} alt="" />
           )}
         </div>
       </div>
@@ -85,7 +86,7 @@ const Team = (props) => {
         <h2 className="title text-xl text-gray-700 font-mono">Derniers matchs</h2>
         <div className="p-5">
           {[...Array(4).keys()].map((_, index) => (
-            <MatchRow key={index} id={props.data.id} index={index} />
+            <MatchRow key={index} id={props.data.id} index={index} type="Search" />
           ))}
         </div>
       </div>

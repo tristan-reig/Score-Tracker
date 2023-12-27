@@ -35,13 +35,10 @@ const Search = () => {
     }
     fetchData("players")
     fetchData("teams")
-    if (query.split(' ').length >= 2) {
-      navigate('/search?query=' + query.split(' ').join('-'))
-    }
   },[query, navigate]);
 
   if (!data) {
-      return <div className='loading loading-ring loading-lg'></div>;
+    return <div className='loading loading-ring loading-lg'></div>;
   }
 
   return (

@@ -1,6 +1,5 @@
 import { startOfWeek, addDays, format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import Event from './Event';
 
 const Planning = () => {
   const startOfWeekDate = startOfWeek(new Date(), {weekStartsOn: 1});

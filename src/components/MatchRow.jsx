@@ -34,24 +34,24 @@ const MatchRow = (props) => {
   
   return (
     <div className="h-[90px] w-100 flex flex-row border-black border mx-64">
-        <div className="infos flex w-[100px] items-center justify-center text-black font-bold text-md border-r border-black">
-          <img src={dataMatch.league.image_url} className="w-20 h-20" alt="" />
+      <div className="infos flex w-[100px] items-center justify-center text-black font-bold text-md border-r border-black">
+        <img src={dataMatch.league.image_url} className="w-lg h-lg" alt="" />
+      </div>
+      <div className="match flex flex-row items-center justify-center text-black text-center mx-auto">
+        <div className="team-row flex flex-row justify-center align-items">
+          <div className="team1 my-4 text-lg">{dataMatch.opponents[0].opponent.acronym}</div>
+          <img className="m-2 w-12 h-12" src={dataMatch.opponents[0].opponent.image_url} alt="" />
         </div>
-        <div className="match flex flex-row items-center justify-center text-black text-center mx-auto">
-          <div className="team-row flex flex-row justify-center align-items">
-            <div className="team1 my-4 text-lg">{dataMatch.opponents[0].opponent.acronym}</div>
-            <img className="m-2 w-12 h-12" src={dataMatch.opponents[0].opponent.image_url} alt="" />
-          </div>
-          <div className="result-score flex flex-row text-xl">
-            <div className="p-1">{dataMatch.results[0].score}</div>
-            <div className="p-1">-</div>
-            <div className="p-1">{dataMatch.results[1].score}</div>
-          </div>
-          <div className="team-row flex flex-row justify-center align-items">
-            <img className="m-2 w-12 h-12" src={dataMatch.opponents[1].opponent.image_url} alt="" />
-            <div className="team2 my-4 text-lg">{dataMatch.opponents[1].opponent.acronym}</div>
-          </div>
+        <div className="result-score flex flex-row text-xl">
+          <div className="p-1">{dataMatch.results[0].score}</div>
+          <div className="p-1">-</div>
+          <div className="p-1">{dataMatch.results[1].score}</div>
         </div>
+        <div className="team-row flex flex-row justify-center align-items">
+          <img className="m-2 w-12 h-12" src={dataMatch.opponents[1].opponent.image_url} alt="" />
+          <div className="team2 my-4 text-lg">{dataMatch.opponents[1].opponent.acronym}</div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Test from "./pages/Test";
 import Search from "./pages/Search";
 import Planning from "./components/Planning";
+import Top14 from "./pages/Top14";
 
 export default function App() {
   return (
@@ -17,6 +18,9 @@ export default function App() {
         </Route>
         <Route path="/planning" element={<Layout />}>
           <Route index element={<Planning />}/>
+        </Route>
+        <Route path="/Top14" element={<Layout />}>
+          <Route index element={<Top14 />}/>
         </Route>
         <Route path="/test" element={<Test />} />
       </Routes>

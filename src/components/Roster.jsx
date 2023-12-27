@@ -25,7 +25,7 @@ const Roster = (props) => {
 
   return (
     <div className="player flex flex-col items-center justify-center">
-      <img className="photo w-60 h-48" src={player.image_url} alt="" />
+      <img className="photo w-60 h-lg" src={player.image_url} alt="" />
       <div className="infos flex flex-row mt-3">
         <span className={`flag-icon flag-icon-${player.nationality.toLowerCase()} m-3 mt-2`}></span>
         <h3 className="font-['pseudo'] text-2xl text-black">{player.name}</h3>
