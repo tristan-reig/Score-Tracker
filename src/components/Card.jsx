@@ -21,6 +21,14 @@ const Card = (props) => {
                         <span>Nationalité : </span>
                         <span title={playerRegion.of(props.data.nationality)} className={`flag-icon flag-icon-${props.data.nationality.toLowerCase()}`}></span>
                     </div>
+                    <div className="field flex flex-row align-items justify-between">
+                        <span>Equipe : </span>
+                        <img title={props.data.current_team.name} className='w-6' src={props.data.current_team.image_url} />
+                    </div>
+                    <div className="field flex flex-row align-items justify-between">
+                        <span>Role : </span>
+                        <span>{props.data.role.charAt(0).toUpperCase() + props.data.role.slice(1)}</span>
+                    </div>
                 </div>
             </div>
         </div>

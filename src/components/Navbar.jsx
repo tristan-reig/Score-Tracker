@@ -12,7 +12,7 @@ const Navbar = () => {
         <div className="navbar-center">
             <form action="/search">
                 <div className="join">
-                    <input name="query" type="text" placeholder="Chercher une équipe, un joueur..." className="input input-bordered block rounded-md w-96 focus:outline-none" />
+                    <input autoComplete='off' name="query" type="text" placeholder="Chercher une équipe, un joueur..." className="input input-bordered block rounded-md w-96 focus:outline-none" />
                 </div>
             </form>
         </div>

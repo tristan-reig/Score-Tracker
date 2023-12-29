@@ -1,36 +1,45 @@
-import axios from "axios";
-import { useEffect, useState } from "react"
-import Table from "../components/Table";
-import Matches from "../components/Matches";
-import TeamCard from "../components/TeamCard";
+import axios from 'axios'
+import { useState, useEffect } from 'react'
+import TeamCard from '../components/TeamCard'
+import { useSearchParams } from 'react-router-dom'
 
-const Top14 = () => {
+const League = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
-  const [data, setData] = useState(null);
-  const clubs = ["Clermont", "Bayonne", "Castres", "Lyon", "Montpellier", "Oyonnax", "Racing-92", "Toulon", "Pau", "Paris", "La-Rochelle", "Toulouse", "Bordeaux-begles", "Perpignan"]
+  const [data, setData] = useState(null)
+  const [queryParameters] = useSearchParams()
+  const id = queryParameters.get("id")
+  var teams = ""
+
+  console.log(id)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const options = {
           method: 'GET',
-          url: 'https://rugby-live-data.p.rapidapi.com/teams/1230/2024',
+          url: `https://api.pandascore.co/leagues/${id}/tournaments`,
           headers: {
-            "X-RapidAPI-Key": "5b49c55b86msh81044d50006f92cp1421cfjsnc45ffb5ba491",
-            "X-RapidAPI-Host": "rugby-live-data.p.rapidapi.com"
+            accept: 'application/json',
+            authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
           }
         };
         const response = await axios.request(options);
-        setData(response.data.results);
+        setData(response.data);
       } catch (error) {
         console.log(error)
       }
     }
     fetchData()
-  },[]);
+  },[id]);
 
   if (!data) {
     return <div className='loading loading-ring loading-lg'></div>;
+  }
+
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].serie.year === 2024) {
+      teams = data[i].teams
+    }
   }
 
   return (
@@ -42,21 +51,21 @@ const Top14 = () => {
       </div>
       <div className="w-full border">
         {currentTab === "Teams" && (
-          <div className="grid grid-cols-5 gap-4 p-5">
-            {clubs.map((club, index) => (
-              <TeamCard key={index} name={data[index].name} index={index} image={`https://cdn.lnr.fr/club/${club}/photo/logo.bf3916f6c3950e6f8db29a8382a5f08159c542ad`} id={''} />
+          <div className="grid grid-cols-4 gap-4 p-5">
+            {teams.map((team, index) => (
+              <TeamCard key={index} name={team.name} index={index} image={team.image_url} id={team.id} />
             ))}
           </div>
         )}
         {currentTab === "Standings" && (
-          <Table teams={data} clubs={clubs} />
+          <div>Standings</div>
         )}
         {currentTab === "Matches" && (
-          <Matches teams={data} clubs={clubs} />
+          <div>Matches</div>
         )}
       </div>
     </div>
   )
 }
 
-export default Top14
+export default League

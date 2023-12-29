@@ -33,8 +33,8 @@ const Search = () => {
         console.log(error)
       }
     }
-    fetchData("players")
     fetchData("teams")
+    fetchData("players")
   },[query, navigate]);
 
   if (!data) {
