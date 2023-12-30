@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="footer items-center p-4 text-neutral-content bg-gray-900 2xl:h-[10vh]">
       <aside className="items-center grid-flow-col">
-        <p className="2xl:text-lg">Copyright © 2023 - Skiifig</p>
+        <p className="2xl:text-base">Copyright © 2023 - Skiifig</p>
       </aside>
       <nav className="grid-flow-col gap-4 place-self-center justify-self-end align-center flex">
         <h4 className="mt-1 2xl:text-lg 2xl:mt-0">Powered by</h4>

@@ -1,7 +1,7 @@
 import { useRef, useCallback } from "react";
 import { LuSwords } from "react-icons/lu";
 import { MdViewTimeline } from "react-icons/md";
-import { TbTournament } from "react-icons/tb";
+import { GiCrestedHelmet } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import BoxInput from "./BoxInput";
 
@@ -24,10 +24,10 @@ const Hero = () => {
                 <span>Match</span>
                 <LuSwords size={20}/>
             </button>
-            <button to="/" className="btn btn-primary inline-flex justify-center items-center mx-3 py-3 px-5 text-base font-medium text-center text-white rounded-lg">
-                <span>Tournois</span>
-                <TbTournament size={20}/>
-            </button>
+            <Link to="/draft" className="btn btn-primary inline-flex justify-center items-center mx-3 py-3 px-5 text-base font-medium text-center text-white rounded-lg">
+                <span>Draft</span>
+                <GiCrestedHelmet size={24}/>
+            </Link>
             <dialog className="modal focus:outline-none" ref={ref}>
               <div className="modal-box max-w-3xl">
                 <h3 className="font-bold text-3xl">Sélécteur de match</h3>

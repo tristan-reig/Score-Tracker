@@ -6,6 +6,7 @@ import Search from "./pages/Search";
 import Planning from "./components/Planning";
 import Top14 from "./pages/Top14";
 import League from "./pages/League";
+import Draft from "./pages/Draft";
 
 export default function App() {
   return (
@@ -25,6 +26,9 @@ export default function App() {
         </Route>
         <Route path="/league/:league" element={<Layout />}>
           <Route index element={<League />}/>
+        </Route>
+        <Route path="/draft" element={<Layout />}>
+          <Route index element={<Draft />}/>
         </Route>
         <Route path="/test" element={<Test />} />
       </Routes>

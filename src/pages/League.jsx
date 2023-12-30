@@ -2,15 +2,22 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import TeamCard from '../components/TeamCard'
 import { useSearchParams } from 'react-router-dom'
+import Matches from '../components/Matches'
 
 const League = () => {
-  const [currentTab, setCurrentTab] = useState("Teams")
+  const [currentTab, setCurrentTab] = useState("Matches")
   const [data, setData] = useState(null)
   const [queryParameters] = useSearchParams()
   const id = queryParameters.get("id")
   var teams = ""
-
-  console.log(id)
+  const options = {
+    method: 'GET',
+    url: `https://api.pandascore.co/leagues/${id}/matches/upcoming`,
+    headers: {
+      accept: 'application/json',
+      authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +68,7 @@ const League = () => {
           <div>Standings</div>
         )}
         {currentTab === "Matches" && (
-          <div>Matches</div>
+          <Matches options={options} />
         )}
       </div>
     </div>

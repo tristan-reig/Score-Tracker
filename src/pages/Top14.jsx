@@ -8,6 +8,14 @@ const Top14 = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
   const [data, setData] = useState(null);
   const clubs = ["Clermont", "Bayonne", "Castres", "Lyon", "Montpellier", "Oyonnax", "Racing-92", "Toulon", "Pau", "Paris", "La-Rochelle", "Toulouse", "Bordeaux-begles", "Perpignan"]
+  const options = {
+    method: 'GET',
+    url: 'https://rugby-live-data.p.rapidapi.com/fixtures/1230/2024',
+    headers: {
+      "X-RapidAPI-Key": "5b49c55b86msh81044d50006f92cp1421cfjsnc45ffb5ba491",
+      "X-RapidAPI-Host": "rugby-live-data.p.rapidapi.com"
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +60,7 @@ const Top14 = () => {
           <Table teams={data} clubs={clubs} />
         )}
         {currentTab === "Matches" && (
-          <Matches teams={data} clubs={clubs} />
+          <Matches teams={data} clubs={clubs} options={options} />
         )}
       </div>
     </div>
