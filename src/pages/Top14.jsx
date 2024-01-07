@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import Table from "../components/Table";
+import StandingsTable from "../components/StandingsTable";
 import Matches from "../components/Matches";
 import TeamCard from "../components/TeamCard";
 
@@ -12,7 +12,7 @@ const Top14 = () => {
     method: 'GET',
     url: 'https://rugby-live-data.p.rapidapi.com/fixtures/1230/2024',
     headers: {
-      "X-RapidAPI-Key": "5b49c55b86msh81044d50006f92cp1421cfjsnc45ffb5ba491",
+      "X-RapidAPI-Key": "d59892b07cmsh19ece7a195cd71ep1f3879jsnd7e53be6f1f7",
       "X-RapidAPI-Host": "rugby-live-data.p.rapidapi.com"
     }
   };
@@ -24,7 +24,7 @@ const Top14 = () => {
           method: 'GET',
           url: 'https://rugby-live-data.p.rapidapi.com/teams/1230/2024',
           headers: {
-            "X-RapidAPI-Key": "5b49c55b86msh81044d50006f92cp1421cfjsnc45ffb5ba491",
+            "X-RapidAPI-Key": "d59892b07cmsh19ece7a195cd71ep1f3879jsnd7e53be6f1f7",
             "X-RapidAPI-Host": "rugby-live-data.p.rapidapi.com"
           }
         };
@@ -48,7 +48,7 @@ const Top14 = () => {
         <div className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${currentTab === "Standings" ? "bg-black" : ""}`} onClick={() => setCurrentTab("Standings")}>Classement</div>
         <div className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${currentTab === "Matches" ? "bg-black" : ""}`} onClick={() => setCurrentTab("Matches")}>Prochains matchs</div>
       </div>
-      <div className="w-full border">
+      <div className="w-full border-t relative">
         {currentTab === "Teams" && (
           <div className="grid grid-cols-5 gap-4 p-5">
             {clubs.map((club, index) => (
@@ -57,7 +57,7 @@ const Top14 = () => {
           </div>
         )}
         {currentTab === "Standings" && (
-          <Table teams={data} clubs={clubs} />
+          <StandingsTable teams={data} clubs={clubs} />
         )}
         {currentTab === "Matches" && (
           <Matches teams={data} clubs={clubs} options={options} />

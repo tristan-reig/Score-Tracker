@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const Table = (props) => {
+const StandingsTable = (props) => {
   const [data, setData] = useState(null)
   const ind = []
   const res = []
@@ -13,7 +13,7 @@ const Table = (props) => {
           method: 'GET',
           url: 'https://rugby-live-data.p.rapidapi.com/standings/1230/2024',
           headers: {
-            "X-RapidAPI-Key": "5b49c55b86msh81044d50006f92cp1421cfjsnc45ffb5ba491",
+            "X-RapidAPI-Key": "d59892b07cmsh19ece7a195cd71ep1f3879jsnd7e53be6f1f7",
             "X-RapidAPI-Host": "rugby-live-data.p.rapidapi.com"
           }
         };
@@ -57,12 +57,13 @@ const Table = (props) => {
                 </tr>
               </thead>
               {data.map((team, index) => (
-                <tbody key={index} className="">
+                <tbody key={index}>
                   <tr className='text-xl hover:bg-base-300'>
-                    <td className="text-left flex flex-row border-r">
+                    <td className="text-left flex flex-row border-r relative pl-2">
+                      {index === 13 && <span className="bg-red-300 w-1 h-100 absolute inset-y-0 left-0"></span>}
                       <span>{team.position}&nbsp;</span>
-                      <img className="w-10 h-lg p-1" src={`https://cdn.lnr.fr/club/${res[index]}/photo/logo.bf3916f6c3950e6f8db29a8382a5f08159c542ad`} alt="" />
-                      <span className="hover:cursor-pointer">&nbsp;{team.name}</span>
+                      <img className="w-10 h-10 p-1" src={`https://cdn.lnr.fr/club/${res[index]}/photo/logo.bf3916f6c3950e6f8db29a8382a5f08159c542ad`} alt="" />
+                      <span className="hover:cursor-pointer hover:underline">{team.name}</span>
                     </td>
                     <td className="border-r">{team.played}</td>
                     <td className="border-r">{team.won} - {team.lost}</td>
@@ -78,4 +79,4 @@ const Table = (props) => {
   )
 }
 
-export default Table
+export default StandingsTable

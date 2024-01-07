@@ -2,6 +2,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { fr } from 'date-fns/locale';
 import { useEffect, useState } from "react"
+import Select from "./Select";
 
 const Matches = (props) => {
   const [data, setData] = useState(null)
@@ -27,7 +28,7 @@ const Matches = (props) => {
 
   function setUpRugbyData () {
     for (let i = 0; i < data.results.length; i++) {
-      if (data.results[i].game_week === 11) {
+      if (data.results[i].game_week === 12) {
         res.push(data.results[i])
       }
     }
@@ -44,12 +45,11 @@ const Matches = (props) => {
 
   if (props.options.url.includes('rugby')) {setUpRugbyData()}
 
-  console.log(data)
-
   return (
-    <div className="p-5 relative">
+    <div className="p-5">
+      <Select />
       {props.options.url.includes('rugby') ? res.map((match, index) => (
-        <div key={index} className="container mx-auto flex flex-row justify-center relative border-b p-2">
+        <div key={index} className="container mx-auto flex flex-row justify-center items-center relative border-b p-2">
           <div className="absolute top-0 left-0 pl-2 pt-1">
             {match.comp_name} - Semaine {match.game_week} - {match.venue}
           </div>
@@ -67,7 +67,7 @@ const Matches = (props) => {
           <div className="home flex flex-row items-center">
             <div className="items-center flex flex-col">
               <img className="w-lg h-28 mt-3" src={`https://cdn.lnr.fr/club/${home[index]}/photo/logo-thumbnail-1x.b2c9984e11b81c4960a2d7763f7e73e7855a7511`} alt="" />
-              <h2>{match.home} - {match.home_tries}E</h2>
+              <h2>{match.home}{match.status === "Result" && (' - ' + match.away_tries + 'E')}</h2>
             </div>
             <span className="text-2xl px-5">{match.home_score}</span>
           </div>
@@ -75,8 +75,8 @@ const Matches = (props) => {
           <div className="away flex flex-row items-center">
             <span className="text-2xl px-5">{match.away_score}</span>
             <div className="items-center flex flex-col">
-              <img className="w-28 h-28 mt-3" src={`https://cdn.lnr.fr/club/${away[index]}/photo/logo-thumbnail-1x.b2c9984e11b81c4960a2d7763f7e73e7855a7511`} alt="" />
-              <h2>{match.away} - {match.away_tries}E</h2>
+              <img className="w-lg h-28 mt-3" src={`https://cdn.lnr.fr/club/${away[index]}/photo/logo-thumbnail-1x.b2c9984e11b81c4960a2d7763f7e73e7855a7511`} alt="" />
+              <h2>{match.away}{match.status === "Result" && (' - ' + match.away_tries + 'E')}</h2>
             </div>
           </div>
         </div>
