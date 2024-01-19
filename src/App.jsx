@@ -7,6 +7,7 @@ import Planning from "./components/Planning";
 import Top14 from "./pages/Top14";
 import League from "./pages/League";
 import Draft from "./pages/Draft";
+import Ligue1 from "./pages/Ligue1";
 
 export default function App() {
   return (
@@ -23,6 +24,9 @@ export default function App() {
         </Route>
         <Route path="/top14" element={<Layout />}>
           <Route index element={<Top14 />}/>
+        </Route>
+        <Route path="/ligue1" element={<Layout />}>
+          <Route index element={<Ligue1 />}/>
         </Route>
         <Route path="/league/:league" element={<Layout />}>
           <Route index element={<League />}/>

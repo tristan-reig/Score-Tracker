@@ -1,62 +1,64 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import TeamCard from '../components/TeamCard'
-import { useSearchParams } from 'react-router-dom'
-import Matches from '../components/Matches'
+import { Link, useSearchParams } from 'react-router-dom'
+import Select from '../components/Select'
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import Skeleton from '../components/Skeleton'
 
 const League = () => {
-  const [currentTab, setCurrentTab] = useState("Matches")
-  const [data, setData] = useState(null)
+  const [currentTab, setCurrentTab] = useState("Standings")
+  const [dataTeams, setDataTeams] = useState(null)
+  const [dataStandings, setDataStandings] = useState(null)
+  const [dataMatches, setDataMatches] = useState(null)
   const [queryParameters] = useSearchParams()
-  const id = queryParameters.get("id")
+  const leagueId = queryParameters.get("id")
   var teams = ""
-  const options = {
-    method: 'GET',
-    url: `https://api.pandascore.co/leagues/${id}/matches/upcoming`,
-    headers: {
-      accept: 'application/json',
-      authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const options = {
           method: 'GET',
-          url: `https://api.pandascore.co/leagues/${id}/tournaments`,
           headers: {
             accept: 'application/json',
             authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
           }
         };
-        const response = await axios.request(options);
-        setData(response.data);
+        options['url'] = `https://api.pandascore.co/leagues/${leagueId}/tournaments`
+        var response = await axios.request(options);
+        setDataTeams(response.data);
+        options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].id}/matches?sort_by=begin_at&page=1&per_page=5`
+        response = await axios.request(options)
+        setDataMatches(response.data.reverse());
+        options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].tournament_id}/standings`
+        response = await axios.request(options)
+        setDataStandings(response.data);
       } catch (error) {
         console.log(error)
       }
     }
     fetchData()
-  },[id]);
+  },[leagueId]);
 
-  if (!data) {
-    return <div className='loading loading-ring loading-lg'></div>;
+  if (!dataTeams || !dataStandings || !dataMatches) {
+    return <div className="mt-5">
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={true} />
+      <Skeleton length={10} column={4} />
+    </div>
   }
 
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].serie.year === 2024) {
-      teams = data[i].teams
+  for (let i = 0; i < dataTeams.length; i++) {
+    if (dataTeams[i]["begin_at"].includes("2024")) {
+      teams = dataTeams[i].teams
     }
   }
 
   return (
     <div className="mt-5">
-      <div className="flex flex-row items-center text-center justify-around gap-4">
-        <div className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${currentTab === "Teams" ? "bg-black" : ""}`} onClick={() => setCurrentTab("Teams")}>Equipes</div>
-        <div className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${currentTab === "Standings" ? "bg-black" : ""}`} onClick={() => setCurrentTab("Standings")}>Classement</div>
-        <div className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${currentTab === "Matches" ? "bg-black" : ""}`} onClick={() => setCurrentTab("Matches")}>Prochains matchs</div>
-      </div>
-      <div className="w-full border">
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={true} />
+      <div className="w-full border-t">
         {currentTab === "Teams" && (
           <div className="grid grid-cols-4 gap-4 p-5">
             {teams.map((team, index) => (
@@ -65,10 +67,77 @@ const League = () => {
           </div>
         )}
         {currentTab === "Standings" && (
-          <div>Standings</div>
+          <div className="flex flex-col overflow-x-hidden p-5">
+            <div className="2xl:mx-8">
+              <div className="inline-block min-w-full py-2 2xl:px-8">
+                <div className="overflow-hidden">
+                  <table className="min-w-full text-center text-sm font-light">
+                    <thead className="border-b font-medium">
+                      <tr>
+                        <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
+                        <th scope="col" className="px-6 py-4 text-lg border-r">Matchs Joués</th>
+                        <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Défaites</th>
+                      </tr>
+                    </thead>
+                    {dataStandings.map((team, index) => (
+                      <tbody key={index} className={`${index === 0 && ""}`}>
+                        <tr className="text-xl hover:bg-base-300">
+                          <td className="text-left flex flex-row border-r relative pl-2">
+                            <span>
+                              {index + 1 === team.rank ? team.rank : "-"}&nbsp;
+                              </span>
+                            <img className="w-10 h-lg p-1" src={team.team.image_url} alt="" />
+                            <Link to={`/search?query=${team.team.id}`} className="hover:cursor-pointer hover:underline">{team.team.name}</Link>
+                          </td>
+                          <td className="border-r">{team.total}</td>
+                          <td className="border-r">{team.wins} - {team.losses}</td>
+                        </tr>
+                      </tbody>
+                    ))}
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
         {currentTab === "Matches" && (
-          <Matches options={options} />
+          Array.from({length : dataMatches.length }).map((_, index) => (
+            <div key={index} className={`container mx-auto flex flex-row justify-center relative ${index === dataMatches.length - 1 ? "" : "border-b"} p-2`}>
+              <div className="absolute top-0 left-0 pl-2 pt-1">
+                  {dataMatches[index].league.name} - BO{dataMatches[index].number_of_games}
+                </div>
+              <div className="absolute top-0 right-0 pr-2 pt-1">
+                {dataMatches[index].status === "not_started" && "Prochainement"}
+                {dataMatches[index].status === "running" && "En cours"}
+                {dataMatches[index].status === "finished" && "Terminé"}
+              </div>
+              <div className="absolute bottom-0 left-0 pl-2 pb-1">
+                {parseInt(dataMatches[index].scheduled_at.split('T')[1].split('+')[0].split(':')[0]) + 1 + ":00"}
+              </div>
+              <div className="absolute bottom-0 right-0 pr-2 pb-1">
+                {dataMatches[index].scheduled_at.split('T')[0].split('-')[2] + " " + format(new Date(2023, dataMatches[index].scheduled_at.split('T')[0].split('-')[1] - 1, 1), 'MMMM', {locale: fr})}
+              </div>
+              <div className="home flex flex-row items-center">
+                <div className="items-center flex flex-row">
+                  <img className={`w-lg h-24 mt-3 ${dataMatches[index].status === "finished" && dataMatches[index].results[0].score === 0 ? "brightness-50" : ""}`} src={dataMatches[index].opponents[0].opponent.image_url} title={dataMatches[index].opponents[0].opponent.name} alt="" />
+                </div>
+                <span className="text-2xl px-5">{dataMatches[index].results[0].score}</span>
+              </div>
+              <span className="text-2xl my-auto">-</span>
+              <div className="away flex flex-row items-center">
+                <span className="text-2xl px-5">{dataMatches[index].results[1].score}</span>
+                <div className="items-center flex flex-col">
+                <img className={`w-lg h-24 mt-3 ${dataMatches[index].status === "finished" && dataMatches[index].results[1].score === 0 ? "brightness-50" : ""}`} src={dataMatches[index].opponents[1].opponent.image_url} title={dataMatches[index].opponents[1].opponent.name} alt="" />
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+        {currentTab === "Live" && (
+          <div className='flex flex-row'>
+            <iframe src="https://player.twitch.tv/?channel=otplol_&parent=localhost" allowfullscreen="true" height={"650"} width={"1200"}></iframe>
+            <iframe id="chat_embed" src="https://www.twitch.tv/embed/otplol_/chat?parent=localhost&darkpopout" height={"650"} width={window.screen.width - "1200"}></iframe>
+          </div>
         )}
       </div>
     </div>

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 const Draft = () => {
   const [data, setData] = useState(null)
-  const postes = ["Top", "Jun", "Mid", "Adc", "Sup"]
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,15 +65,6 @@ const Draft = () => {
       ))}
       <div className="flex flex-col justify-center items-center">
         <div className="mt-4">
-          <div className="flex flex-row items-center justify-around border-b">
-            {postes.map((poste, index) => (
-              <img 
-                className='w-10 mb-2 cursor-pointer brightness-75 hover:brightness-125' 
-                key={index} 
-                src={`../../src/assets/${poste}.png`} 
-              />
-            ))}
-          </div>
           {Array.from({length : 166 / 15 }).map((_, index1) => (
             <div key={index1} className="flex flex-row">
               {Array.from({length : 15}).map((_, index2) => (

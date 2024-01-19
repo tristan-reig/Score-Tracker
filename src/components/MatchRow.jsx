@@ -35,7 +35,7 @@ const MatchRow = (props) => {
   return (
     <div className="h-[90px] w-100 flex flex-row border-black border mx-64">
       <div className="infos flex w-[100px] items-center justify-center text-black font-bold text-md border-r border-black">
-        <img src={dataMatch.league.image_url} className="w-lg h-lg" alt="" />
+        <img src={dataMatch.league.image_url} className="px-5" alt="" />
       </div>
       <div className="match flex flex-row items-center justify-center text-black text-center mx-auto">
         <div className="team-row flex flex-row justify-center align-items">

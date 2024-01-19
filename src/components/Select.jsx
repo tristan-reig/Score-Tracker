@@ -1,13 +1,27 @@
-const Select = () => {
+const Select = (props) => {
   return (
-    <div className="flex items-center justify-center h-[50px] overflow-y-visible">
-      <select className="select select-bordered" onClick={(event) => console.log(event.target)}>
-        {Array.from({ length: 20 }).map((_, index) => (
-          <option key={index}>Semaine {index + 1}</option>
-        ))}
-      </select>
+    <div className="flex flex-row items-center text-center justify-around gap-4">
+      <div 
+        className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${props.currentTab === "Teams" ? "bg-black" : ""}`} 
+        onClick={() => props.setCurrentTab("Teams")}
+      >Equipes
+      </div>
+      <div 
+        className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${props.currentTab === "Standings" ? "bg-black" : ""}`} 
+        onClick={() => props.setCurrentTab("Standings")}
+      >Classement
+      </div>
+      <div 
+        className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${props.currentTab === "Matches" ? "bg-black" : ""}`} 
+        onClick={() => props.setCurrentTab("Matches")}
+      >Prochains matchs</div>
+      {props.live && (
+        <div className={`element border w-full p-5 text-xl border-b-0 cursor-pointer hover:bg-black ${props.currentTab === "Live" ? "bg-black" : ""}`} 
+        onClick={() => props.setCurrentTab("Live")}
+        ><span className="rounded-full border text-white bg-red-500 hover:bg-red-600 font-bold px-10 py-2">Live</span></div>)
+      }
     </div>
-  );
-};
+  )
+}
 
-export default Select;
+export default Select

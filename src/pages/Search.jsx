@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Team from "../components/Team"
-import Player from "../components/Player"
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -11,11 +10,11 @@ const Search = () => {
   const query = queryParameters.get("query").toLowerCase()
 
   useEffect(() => {
-    const fetchData = async (param) => {
+    const fetchData = async () => {
       try {
         const options = {
           method: 'GET',
-          url: 'https://api.pandascore.co/' + param + '/' + query,
+          url: 'https://api.pandascore.co/teams/' + query,
           params: {
             'filter[videogame_id]': '1',
             sort: 'acronym',
@@ -33,8 +32,7 @@ const Search = () => {
         console.log(error)
       }
     }
-    fetchData("teams")
-    fetchData("players")
+    fetchData()
   },[query, navigate]);
 
   if (!data) {
@@ -43,8 +41,7 @@ const Search = () => {
 
   return (
     <div>
-      {data.first_name && <Player data={data} />}
-      {data.acronym && <Team data={data} />}
+      <Team data={data} />
     </div>
   )
 }

@@ -52,7 +52,7 @@ const Team = (props) => {
         <h2 className="text-xl text-gray-700 font-mono">Equipe</h2>
         <div className="p-5 top-content flex flex-col justify-center items-center">
           <div className="my-16 flex flex-row items-center">
-            <img src={props.data.image_url} className="mx-8 w-40 h-40"></img>
+            <img src={props.data.image_url} className="mx-8 w-lg h-40"></img>
             <h1 className="text-4xl font-['title'] uppercase text-gray-900 mx-8 tracking-[.15em]">{props.data.name}</h1>
           </div>
         </div>
