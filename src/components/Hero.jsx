@@ -11,10 +11,10 @@ const Hero = () => {
     ref.current?.showModal()
   }, [ref])
   return (
-  <section className="bg-gray-800 2xl:h-[35vh]">
+  <section className="bg-gray-800 2xl:h-[30vh]">
       <div className="py-16 px-4 mx-auto max-w-screen-xl text-center">
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white">Tout le sport et l&apos;esport réunis dans un endroit</h1>
-          <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Here at Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
+          <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, consectetur soluta. Obcaecati quasi cumque quos omnis, animi id at nesciunt iusto accusantium.</p>
           <div className="flex flex-row space-y-0 justify-center">
             <Link to="/planning" className="btn btn-accent inline-flex justify-center items-center mx-3 py-3 px-5 text-base font-medium text-center text-white rounded-lg">
                 <span>Planning</span>

@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Hero/>
-      <div className="grid grid-cols-4 p-5 2xl:h-[45vh]">
+      <div className="grid grid-cols-4 p-5 2xl:h-[40vh]">
           <Link to="/league/lec?id=4197" className="mx-auto">
               <img className="h-72 w-72 2xl:h-96 2xl:w-96 p-5 rounded-lg cursor-pointer bg-gradient-to-r from-cyan-500 to-lime-300 transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-105 hover:bg-indigo-500 duration-150" src={Lec} alt=""/>
           </Link>

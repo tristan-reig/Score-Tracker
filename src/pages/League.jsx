@@ -6,9 +6,10 @@ import Select from '../components/Select'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import Skeleton from '../components/Skeleton'
+import Bracket from '../components/Bracket'
 
 const League = () => {
-  const [currentTab, setCurrentTab] = useState("Standings")
+  const [currentTab, setCurrentTab] = useState("Teams")
   const [dataTeams, setDataTeams] = useState(null)
   const [dataStandings, setDataStandings] = useState(null)
   const [dataMatches, setDataMatches] = useState(null)
@@ -67,35 +68,46 @@ const League = () => {
           </div>
         )}
         {currentTab === "Standings" && (
-          <div className="flex flex-col overflow-x-hidden p-5">
-            <div className="2xl:mx-8">
-              <div className="inline-block min-w-full py-2 2xl:px-8">
-                <div className="overflow-hidden">
-                  <table className="min-w-full text-center text-sm font-light">
-                    <thead className="border-b font-medium">
-                      <tr>
-                        <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
-                        <th scope="col" className="px-6 py-4 text-lg border-r">Matchs Joués</th>
-                        <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Défaites</th>
-                      </tr>
-                    </thead>
-                    {dataStandings.map((team, index) => (
-                      <tbody key={index} className={`${index === 0 && ""}`}>
-                        <tr className="text-xl hover:bg-base-300">
-                          <td className="text-left flex flex-row border-r relative pl-2">
-                            <span>
-                              {index + 1 === team.rank ? team.rank : "-"}&nbsp;
-                              </span>
-                            <img className="w-10 h-lg p-1" src={team.team.image_url} alt="" />
-                            <Link to={`/search?query=${team.team.id}`} className="hover:cursor-pointer hover:underline">{team.team.name}</Link>
-                          </td>
-                          <td className="border-r">{team.total}</td>
-                          <td className="border-r">{team.wins} - {team.losses}</td>
+          <div className="carousel w-full">
+            <div id='slide1' className="flex flex-col overflow-x-hidden p-5 carousel-item relative w-full">
+              <div className="2xl:mx-8">
+                <div className="inline-block min-w-full py-2 2xl:px-8">
+                  <div className="overflow-hidden">
+                    <table className="min-w-full text-center text-sm font-light">
+                      <thead className="border-b font-medium">
+                        <tr>
+                          <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
+                          <th scope="col" className="px-6 py-4 text-lg border-r">Matchs Joués</th>
+                          <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Défaites</th>
                         </tr>
-                      </tbody>
-                    ))}
-                  </table>
+                      </thead>
+                      {dataStandings.map((team, index) => (
+                        <tbody key={index} className={`${index === 0 && ""}`}>
+                          <tr className="text-xl hover:bg-base-300">
+                            <td className="text-left flex flex-row border-r relative pl-2">
+                              <span>
+                                {index + 1 === team.rank ? team.rank : "-"}&nbsp;
+                                </span>
+                              <img className="w-lg h-10 m-1 p-1" src={team.team.image_url} alt="" />
+                              <Link to={`/search?query=${team.team.id}`} className="hover:cursor-pointer hover:underline">{team.team.name}</Link>
+                            </td>
+                            <td className="border-r">{team.total}</td>
+                            <td className="border-r">{team.wins} - {team.losses}</td>
+                          </tr>
+                        </tbody>
+                      ))}
+                    </table>
+                  </div>
                 </div>
+              </div>
+              <div className="absolute flex justify-between right-10 top-1/2">
+                <a href="#slide2" className="btn btn-circle">❯</a>
+              </div>
+            </div>
+            <div id='slide2' className="flex flex-col overflow-x-hidden p-5 carousel-item relative w-full">
+              <Bracket />
+              <div className="absolute flex justify-between left-5 top-1/2">
+                <a href="#slide1" className="btn btn-circle">{"<"}</a>
               </div>
             </div>
           </div>
@@ -135,7 +147,7 @@ const League = () => {
         )}
         {currentTab === "Live" && (
           <div className='flex flex-row'>
-            <iframe src="https://player.twitch.tv/?channel=otplol_&parent=localhost" allowfullscreen="true" height={"650"} width={"1200"}></iframe>
+            <iframe src="https://player.twitch.tv/?channel=otplol_&parent=localhost" allowFullScreen={true} height={"650"} width={"1200"}></iframe>
             <iframe id="chat_embed" src="https://www.twitch.tv/embed/otplol_/chat?parent=localhost&darkpopout" height={"650"} width={window.screen.width - "1200"}></iframe>
           </div>
         )}
