@@ -41,7 +41,7 @@ const Top14 = () => {
 
   if (!dataTeams || !dataStandings ||!dataMatches) {
     return <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <Skeleton length={14} column={5} />
     </div>
   }
@@ -88,7 +88,7 @@ const Top14 = () => {
   
   return (
     <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={false} />
       <div className="w-full border-t relative">
         {currentTab === "Teams" && (
           <div className="grid grid-cols-5 gap-4 p-5">
@@ -115,7 +115,7 @@ const Top14 = () => {
                     {dataStandings.standings[0].teams.map((team, index) => (
                       <tbody key={index}>
                         <tr className="text-xl hover:bg-base-300">
-                          <td className="text-left flex flex-row border-r relative pl-2">
+                          <td className="text-left flex flex-row border-r relative pl-2 items-center">
                             <span>{team.position}&nbsp;</span>
                             <img className="w-10 h-10 p-1" src={`https://cdn.lnr.fr/club/${setUpStandings()[index]}/photo/logo.bf3916f6c3950e6f8db29a8382a5f08159c542ad`} alt="" />
                             <span className="hover:cursor-pointer hover:underline">{team.name}</span>

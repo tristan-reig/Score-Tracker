@@ -28,7 +28,7 @@ const Navbar = () => {
         <div className="join py-2 relative">
           <button className="btn join-item text-xl pb-1 rounded-r-full">+</button>
           <input className="input join-item w-24 text-red-500 pointer-events-none text-white text-center" readOnly="readonly" placeholder={points}/>
-          <button onClick={() => updatePoints()} className="btn join-item rounded-l-full"><img className='w-6 h-6' src="https://static-cdn.jtvnw.net/channel-points-icons/622498423/47f4c0d6-e4a5-4ecd-838c-8a6cde7b1389/icon-1.png" alt="" /></button>
+          <button onClick={() => updatePoints()} className="btn join-item rounded-l-full"><img className='w-6 h-6' src="https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/60815/golden-dollar-coin-clipart-md.png" alt="" /></button>
         </div>
       </div>
     </div>

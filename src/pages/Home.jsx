@@ -6,6 +6,8 @@ import Ligue1 from "../assets/Ligue1.png"
 import { Link } from 'react-router-dom'
 
 export default function Home() {
+  sessionStorage.clear()
+
   return (
     <>
       <Hero/>

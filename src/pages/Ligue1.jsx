@@ -33,7 +33,7 @@ const Ligue1 = () => {
 
   if (!dataTeams || !dataStandings) {
     return <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <Skeleton length={18} column={6} />
     </div>
   }
@@ -42,7 +42,7 @@ const Ligue1 = () => {
   
   return (
     <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={false} />
       <div className="w-full border-t relative">
         {currentTab === "Teams" && (
           <div className="grid grid-cols-6 gap-4 p-5">

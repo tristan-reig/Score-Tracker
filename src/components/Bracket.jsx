@@ -3,7 +3,8 @@ import { useState, useEffect } from "react"
 
 const Bracket = () => {
   const [dataBracket, setdataBracket] = useState(null)
-  var res = []
+  const cases = [15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12]
+  var res = {}
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,13 +30,16 @@ const Bracket = () => {
     return <div></div>
   }
 
-  console.log(dataBracket)
-
   for (let i=0; i<12; i++) {
-    res.push(dataBracket[i/2])
+    var somme = 0
+    var idTeam = dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.id
+    for (let j=0; j<dataBracket[Math.floor(i / 2)].games.length; j++) {
+      if (idTeam == dataBracket[Math.floor(i / 2)].games[j].winner.id) {
+        somme += 1
+      }
+    }
+    res[i] = [dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.name, dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.image_url, somme]
   }
-
-  console.log(res)
 
   return (
     <div className="grid grid-cols-4">
@@ -43,22 +47,22 @@ const Bracket = () => {
         <div
           key={index} 
           className={
-            `${[1, 5, 8, 12, 24, 28, 17, 21, 26, 30, 15, 19].includes(index) && "border"}
-            ${[1, 8, 15, 17, 24, 26].includes(index) && "border-b-0"}
-            ${[5, 12, 19, 21, 28, 30].includes(index) && "border-t-0"}
-            ${[6].includes(index) && "border-t"}
-            ${[7, 13, 22, 23].includes(index) && "border-t border-r w-[50%]"}
-            ${[11, 25, 27].includes(index) && "border-b border-r w-[50%]"}
+            `${cases.includes(index) ? "border" : ""}
+            ${[1, 8, 15, 17, 24, 26].includes(index) ? "border-b-0" : ""}
+            ${[5, 12, 19, 21, 28, 30].includes(index) ? "border-t-0" : ""}
+            ${[6].includes(index) ? "border-t" : ""}
+            ${[7, 13, 22, 23].includes(index) ? "border-t border-r w-[50%]" : ""}
+            ${[11, 25, 27].includes(index) ? "border-b border-r w-[50%]" : ""}
+            ${index % 4 == 3 ? "w-80" : ""}
             h-[62.5px] flex`} 
-          title={index}
         >
-          {[1, 5, 8, 12, 24, 28, 17, 21, 26, 30, 15, 19].includes(index) && (
+          {cases.includes(index) && (
             <span className="flex w-full m-2 items-center justify-between p-2 hover:bg-gray-700 cursor-pointer rounded-md">
               <div className="flex flex-row items-center gap-3">              
-                <span>Team GO</span>
-                <img className="w-10 h-10" src="https://cdn.pandascore.co/images/team/image/131000/team_g_ologo_square.png" alt="" />
+                <span>{res[cases.findIndex((element) => element === index)][0]}</span>
+                <img className="w-lg h-10" src={`${res[cases.findIndex((element) => element === index)][1]}`} alt="" />
               </div>
-              <span className="text-xl">2</span>
+              <span className="text-xl">{res[cases.findIndex((element) => element === index)][2]}</span>
             </span>
           )}
         </div>
