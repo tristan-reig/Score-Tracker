@@ -21,17 +21,21 @@ const League = () => {
   var teams = ""
 
   useEffect(() => {
-    fetch(`http://localhost:3001/${leagueId}/teams`)
-      .then((res) => res.json())
-      .then((data) => console.log(data.message) && setDataTeams(data.message));
-  
-    fetch(`http://localhost:3001/12564/standings`)
-      .then((res) => res.json())
-      .then((data) => setDataStandings(data.message));
+    const fetchData = async () => {
+      try {
+        var response = await axios.get(`http://localhost:3001/${leagueId}/teams`)
+        setDataTeams(response.data.message)
+        var tournamentId = response.data.message[0].id
+        response = await axios.get(`http://localhost:3001/${tournamentId}/standings`)
+        setDataStandings(response.data.message)
+        response = await axios.get(`http://localhost:3001/${tournamentId}/matches`)
+        setDataMatches(response.data.message)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchData()
   }, [leagueId]);
-
-  // options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].id}/matches?sort=begin_at&page=1&per_page=50`
-  // options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].tournament_id}/standings`
 
   if (!dataTeams || !dataStandings) {
     return <div className="mt-5">
@@ -39,6 +43,7 @@ const League = () => {
       <Skeleton length={10} column={4} />
     </div>
   }
+
 
   for (let i = 0; i < dataTeams.length; i++) {
     if (dataTeams[i]["begin_at"].includes("2024")) {

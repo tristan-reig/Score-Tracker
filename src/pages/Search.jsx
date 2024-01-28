@@ -12,21 +12,7 @@ const Search = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const options = {
-          method: 'GET',
-          url: 'https://api.pandascore.co/teams/' + query,
-          params: {
-            'filter[videogame_id]': '1',
-            sort: 'acronym',
-            page: '1',
-            per_page: '50'
-          },
-          headers: {
-            accept: 'application/json',
-            authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
-          }
-        };
-        const response = await axios.request(options);
+        const response = await axios.get(`http://localhost:3001/search/${query}`);
         setData(response.data);
       } catch (error) {
         console.log(error)
@@ -41,7 +27,7 @@ const Search = () => {
 
   return (
     <div>
-      <Team data={data} />
+      <Team data={data.message} />
     </div>
   )
 }

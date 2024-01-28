@@ -10,16 +10,8 @@ const Team = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const options = {
-          method: 'GET',
-          url: 'https://api.pandascore.co/teams/'+ props.data.id +'/leagues',
-          headers: {
-            accept: 'application/json',
-            authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
-          }
-        };
-        const response = await axios.request(options);
-        setData(response.data);
+        const response = await axios.get(`http://localhost:3001/search/team/${props.data.id}`);
+        setData(response.data.message);
       } catch (error) {
         console.log(error)
       }
@@ -86,7 +78,7 @@ const Team = (props) => {
         <h2 className="title text-xl text-gray-700 font-mono">Derniers matchs</h2>
         <div className="p-5">
           {[...Array(4).keys()].map((_, index) => (
-            <MatchRow key={index} id={props.data.id} index={index} type="Search" />
+            <MatchRow key={index} id={props.data.id} index={index} />
           ))}
         </div>
       </div>

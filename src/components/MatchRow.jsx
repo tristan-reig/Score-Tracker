@@ -6,21 +6,8 @@ const MatchRow = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const options = {
-          method: 'GET',
-          url: 'https://api.pandascore.co/matches/past',
-          params: {
-            'filter[opponent_id]' : props.id,
-            page: props.index + 1,
-            per_page: '1'
-          },
-          headers: {
-            accept: 'application/json',
-            authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
-          }
-        };
-        const response = await axios.request(options);
-        setDataMatch(response.data[0]);
+        const response = await axios.get(`http://localhost:3001/test?id=${props.id}&index=${props.index + 1}`);
+        setDataMatch(response.data.message[0]);
       } catch (error) {
         console.log(error)
       }
