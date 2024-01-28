@@ -21,32 +21,19 @@ const League = () => {
   var teams = ""
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const options = {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes',
-          },
-        };
-        options['url'] = `https://api.pandascore.co/leagues/${leagueId}/tournaments`
-        var response = await axios.request(options);
-        setDataTeams(response.data);
-        options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].id}/matches?sort=begin_at&page=1&per_page=50`
-        response = await axios.request(options)
-        setDataMatches(response.data);
-        options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].tournament_id}/standings`
-        response = await axios.request(options)
-        setDataStandings(response.data);
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchData()
-  },[leagueId]);
+    fetch(`http://localhost:3001/${leagueId}/teams`)
+      .then((res) => res.json())
+      .then((data) => console.log(data.message) && setDataTeams(data.message));
+  
+    fetch(`http://localhost:3001/12564/standings`)
+      .then((res) => res.json())
+      .then((data) => setDataStandings(data.message));
+  }, [leagueId]);
 
-  if (!dataTeams || !dataStandings || !dataMatches) {
+  // options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].id}/matches?sort=begin_at&page=1&per_page=50`
+  // options['url'] = `https://api.pandascore.co/tournaments/${response.data[0].tournament_id}/standings`
+
+  if (!dataTeams || !dataStandings) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={true} disabled={true} />
       <Skeleton length={10} column={4} />
@@ -83,6 +70,7 @@ const League = () => {
                           <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
                           <th scope="col" className="px-6 py-4 text-lg border-r">Matchs Joués</th>
                           <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Défaites</th>
+                          <th scope="col" className="px-6 py-4 text-lg border-r">Points</th>
                         </tr>
                       </thead>
                       {dataStandings.map((team, index) => (
@@ -97,6 +85,7 @@ const League = () => {
                             </td>
                             <td className="border-r">{team.total}</td>
                             <td className="border-r">{team.wins} - {team.losses}</td>
+                            <td className="border-r">{team.wins}</td>
                           </tr>
                         </tbody>
                       ))}
