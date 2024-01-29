@@ -9,7 +9,7 @@ const Bracket = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`https://api.pandascore.co/10993/bracket`)
+        var response = await axios.get(`https://scoretracker-c2xt.onrender.com/10993/bracket`)
         setdataBracket(response.data.message);
       } catch (error) {
         console.log(error)

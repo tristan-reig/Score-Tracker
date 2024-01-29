@@ -55,7 +55,7 @@ app.get('/pastMaches', async (req, res) => {
 
 app.get('/:tournamentId/bracket', async (req, res) => {
   try {
-    options['url'] = `https://scoretracker-c2xt.onrender.com/tournaments/10993/brackets`
+    options['url'] = `https://api.pandascore.co/tournaments/10993/brackets`
     const response = await axios.request(options);
     res.json({message: response.data});
   } catch (error) {
