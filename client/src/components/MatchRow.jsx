@@ -6,7 +6,7 @@ const MatchRow = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/test?id=${props.id}&index=${props.index + 1}`);
+        const response = await axios.get(`http://localhost:3001/pastMaches?id=${props.id}&index=${props.index + 1}`);
         setDataMatch(response.data.message[0]);
       } catch (error) {
         console.log(error)

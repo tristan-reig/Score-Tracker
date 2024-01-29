@@ -43,9 +43,19 @@ app.get('/search/team/:id', async (req, res) => {
   res.json({message: response.data});
 });
 
-app.get('/test', async (req, res) => {
+app.get('/pastMaches', async (req, res) => {
   try {
     options['url'] = `https://api.pandascore.co/matches/past?filter[opponent_id]=${req.query.id}&page=${req.query.index}&per_page=1`
+    const response = await axios.request(options);
+    res.json({message: response.data});
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+app.get('/:tournamentId/bracket', async (req, res) => {
+  try {
+    options['url'] = `https://scoretracker-c2xt.onrender.com/tournaments/10993/brackets`
     const response = await axios.request(options);
     res.json({message: response.data});
   } catch (error) {

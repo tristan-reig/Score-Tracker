@@ -9,16 +9,8 @@ const Bracket = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const options = {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes'
-          }
-        };
-        options['url'] = `https://api.pandascore.co/tournaments/10993/brackets`
-        var response = await axios.request(options);
-        setdataBracket(response.data);
+        var response = await axios.get(`https://api.pandascore.co/10993/bracket`)
+        setdataBracket(response.data.message);
       } catch (error) {
         console.log(error)
       }
