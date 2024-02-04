@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import Select from "../components/Select"
 import TeamCard from "../components/TeamCard";
-import Skeleton from "../components/Skeleton";
+import SkeletonTeamCard from "../components/SkeletonTeamCard";
 
 const Ligue1 = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
@@ -34,7 +34,7 @@ const Ligue1 = () => {
   if (!dataTeams || !dataStandings) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
-      <Skeleton length={18} column={6} />
+      <SkeletonTeamCard length={18} column={6} />
     </div>
   }
 

@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Test from "./pages/Test";
 import Search from "./pages/Search";
 import Planning from "./components/Planning";
-import Top14 from "./pages/Top14";
+import Rugby from "./pages/Rugby";
 import League from "./pages/League";
 import Draft from "./pages/Draft";
 import Ligue1 from "./pages/Ligue1";
@@ -22,8 +22,8 @@ export default function App() {
         <Route path="/planning" element={<Layout />}>
           <Route index element={<Planning />}/>
         </Route>
-        <Route path="/top14" element={<Layout />}>
-          <Route index element={<Top14 />}/>
+        <Route path="/rugby/:league" element={<Layout />}>
+          <Route index element={<Rugby />}/>
         </Route>
         <Route path="/ligue1" element={<Layout />}>
           <Route index element={<Ligue1 />}/>

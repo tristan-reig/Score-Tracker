@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Team from "../components/Team"
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import SkeletonTeamPage from "../components/SkeletonTeamPage";
 
 const Search = () => {
   const [data, setData] = useState(null);
@@ -22,7 +23,7 @@ const Search = () => {
   },[query, navigate]);
 
   if (!data) {
-    return <div className='loading loading-ring loading-lg'></div>;
+    return <SkeletonTeamPage />
   }
 
   return (

@@ -5,7 +5,7 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import Select from '../components/Select'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import Skeleton from '../components/Skeleton'
+import SkeletonTeamCard from '../components/SkeletonTeamCard'
 import Bracket from '../components/Bracket'
 import Pagination from '../components/Pagination'
 
@@ -37,10 +37,10 @@ const League = () => {
     fetchData()
   }, [leagueId]);
 
-  if (!dataTeams || !dataStandings) {
+  if (!dataTeams || !dataStandings || !dataMatches) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={true} disabled={true} />
-      <Skeleton length={10} column={4} />
+      <SkeletonTeamCard length={10} column={4} />
     </div>
   }
 
@@ -48,6 +48,7 @@ const League = () => {
   for (let i = 0; i < dataTeams.length; i++) {
     if (dataTeams[i]["begin_at"].includes("2024")) {
       teams = dataTeams[i].teams
+      console.log(dataTeams[i])
     }
   }
 
@@ -129,8 +130,9 @@ const League = () => {
                   {dataMatches[week * 5 + index].scheduled_at.split('T')[0].split('-')[2] + " " + format(new Date(2023, dataMatches[week * 5 + index].scheduled_at.split('T')[0].split('-')[1] - 1, 1), 'MMMM', {locale: fr})}
                 </div>
                 <div className="home flex flex-row items-center">
-                  <div className="items-center flex flex-row">
-                    <img className={`w-lg h-24 mt-3 ${dataMatches[week * 5 + index].status === "finished" && dataMatches[week * 5 + index].results[0].score === 0 ? "brightness-50" : ""}`} src={dataMatches[week * 5 + index].opponents[0].opponent.image_url} title={dataMatches[week * 5 + index].opponents[0].opponent.name} alt="" />
+                  <div className="items-center flex flex-col">
+                    <img className={`w-24 h-lg mt-3 ${dataMatches[week * 5 + index].status === "finished" && dataMatches[week * 5 + index].results[0].score === 0 ? "brightness-50" : ""}`} src={dataMatches[week * 5 + index].opponents[0].opponent.image_url} title={dataMatches[week * 5 + index].opponents[0].opponent.name} alt="" />
+                    <h2>{dataMatches[week * 5 + index].opponents[0].opponent.name}</h2>
                   </div>
                   <span className="text-2xl px-5">{dataMatches[week * 5 + index].results[0].score}</span>
                 </div>
@@ -138,7 +140,8 @@ const League = () => {
                 <div className="away flex flex-row items-center">
                   <span className="text-2xl px-5">{dataMatches[week * 5 + index].results[1].score}</span>
                   <div className="items-center flex flex-col">
-                  <img className={`w-lg h-24 mt-3 ${dataMatches[week * 5 + index].status === "finished" && dataMatches[week * 5 + index].results[1].score === 0 ? "brightness-50" : ""}`} src={dataMatches[week * 5 + index].opponents[1].opponent.image_url} title={dataMatches[week * 5 + index].opponents[1].opponent.name} alt="" />
+                    <img className={`w-24 h-lg mt-3 ${dataMatches[week * 5 + index].status === "finished" && dataMatches[week * 5 + index].results[1].score === 0 ? "brightness-50" : ""}`} src={dataMatches[week * 5 + index].opponents[1].opponent.image_url} title={dataMatches[week * 5 + index].opponents[1].opponent.name} alt="" />
+                    <h2>{dataMatches[week * 5 + index].opponents[1].opponent.name}</h2>
                   </div>
                 </div>
               </div>

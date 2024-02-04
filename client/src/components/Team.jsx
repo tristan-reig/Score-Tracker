@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Roster from "./Roster"
 import MatchRow from "./MatchRow";
+import SkeletonTeamPage from "./SkeletonTeamPage"
 
 const Team = (props) => {
   const [data, setData] = useState(null);
@@ -20,7 +21,9 @@ const Team = (props) => {
   },[props.data.id]);
 
   if (!data) {
-      return <div className='loading loading-ring loading-lg'></div>;
+      return (
+        <SkeletonTeamPage />
+    )
   }
 
   if (props.data.players.length > 5) {
