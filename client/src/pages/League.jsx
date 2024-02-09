@@ -25,10 +25,11 @@ const League = () => {
       try {
         var response = await axios.get(`https://scoretracker-c2xt.onrender.com/${leagueId}/teams`)
         setDataTeams(response.data.message)
-        var tournamentId = response.data.message[0].id
-        response = await axios.get(`https://scoretracker-c2xt.onrender.com/${tournamentId}/standings`)
+        var tournamentObj = response.data.message[0]
+        if (tournamentObj.name !== "Regular Season") {tournamentObj = response.data.message[1]}
+        response = await axios.get(`https://scoretracker-c2xt.onrender.com/${tournamentObj.id}/standings`)
         setDataStandings(response.data.message)
-        response = await axios.get(`https://scoretracker-c2xt.onrender.com/${tournamentId}/matches`)
+        response = await axios.get(`https://scoretracker-c2xt.onrender.com/${tournamentObj.id}/matches`)
         setDataMatches(response.data.message)
       } catch (error) {
         console.log(error)
@@ -48,7 +49,6 @@ const League = () => {
   for (let i = 0; i < dataTeams.length; i++) {
     if (dataTeams[i]["begin_at"].includes("2024")) {
       teams = dataTeams[i].teams
-      console.log(dataTeams[i])
     }
   }
 
@@ -116,7 +116,7 @@ const League = () => {
             <div key={index}>
               <div className={`container mx-auto flex flex-row justify-center relative border-b p-2`}>
                 <div className="absolute top-0 left-0 pl-2 pt-1">
-                    {dataMatches[week * 5 + index].league.name} - BO{dataMatches[week * 5 + index].number_of_games}
+                    Semaine {week + 1} - {dataMatches[week * 5 + index].league.name} - BO{dataMatches[week * 5 + index].number_of_games}
                   </div>
                 <div className="absolute top-0 right-0 pr-2 pt-1">
                   {dataMatches[week * 5 + index].status === "not_started" && "Prochainement"}

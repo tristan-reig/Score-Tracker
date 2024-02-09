@@ -13,6 +13,10 @@ const options = {
   },
 };
 
+app.get('/', async(req, res) => {
+  res.json({message: "Serveur prêt"})
+})
+
 app.get('/:leagueId/teams', async (req, res) => {
   options['url'] = `https://api.pandascore.co/leagues/${req.params.leagueId}/tournaments`
   const response = await axios.request(options);

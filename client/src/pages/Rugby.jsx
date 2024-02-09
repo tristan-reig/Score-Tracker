@@ -1,6 +1,6 @@
 import format from "date-fns/format";
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import TeamCard from "../components/TeamCard";
 import Select from "../components/Select"
 import { fr } from "date-fns/locale";
@@ -13,29 +13,37 @@ const Top14 = () => {
   const [dataTeams, setDataTeams] = useState(null);
   const [dataStandings, setDataStandings] = useState(null)
   const [dataMatches, setDataMatches] = useState(null)
-  const [queryParameters] = useSearchParams()
   const [week, setWeek] = useState(0)
-  const leagueId = queryParameters.get("id")
+  const [leagueId, setLeagueId] = useState([])
+  const [queryParameters] = useSearchParams()
   var route = useLocation()
   var clubs = []
+
+  // eslint-disable-next-line no-unused-vars
+  const updateLeagueId = useMemo(() => setLeagueId([queryParameters.get("id1"), queryParameters.get("id2")]), [queryParameters])
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         const options = {
           method: 'GET',
+          params : {
+            season : '2023',
+            league : leagueId[1],
+
+          },
           headers: {
-            "X-RapidAPI-Key": "d59892b07cmsh19ece7a195cd71ep1f3879jsnd7e53be6f1f7",
-            "X-RapidAPI-Host": "rugby-live-data.p.rapidapi.com"
+            "X-RapidAPI-Key": "0d6af37ed6mshe1e1da9a44bf621p1d5813jsn3f193721113d",
+            "X-RapidAPI-Host": "api-rugby.p.rapidapi.com"
           }
         };
-        options['url'] = `https://rugby-live-data.p.rapidapi.com/teams/${leagueId}/2024`
+        options['url'] = `https://api-rugby.p.rapidapi.com/teams`
         var response = await axios.request(options);
-        setDataTeams(response.data.results);
-        options['url'] = `https://rugby-live-data.p.rapidapi.com/standings/${leagueId}/2024`
+        setDataTeams(response.data.response);
+        options['url'] = `https://api-rugby.p.rapidapi.com/standings`
         response = await axios.request(options);
-        setDataStandings(response.data.results);
-        options['url'] = `https://rugby-live-data.p.rapidapi.com/fixtures/${leagueId}/2024`
+        setDataStandings(response.data.response[0]);
+        options['url'] = `https://rugby-live-data.p.rapidapi.com/fixtures/${leagueId[0]}/2024`
         response = await axios.request(options);
         setDataMatches(response.data.results);
       } catch (error) {
@@ -45,39 +53,11 @@ const Top14 = () => {
     fetchData()
   },[leagueId]);
 
-  if (!dataTeams || !dataStandings ||!dataMatches) {
+  if (!dataTeams) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <SkeletonTeamCard length={14} column={5} />
     </div>
-  }
-
-  switch (route.pathname.split('/')[2]) {
-    case "top14":
-      clubs = ["Clermont", "Bayonne", "Castres", "Lyon", "Montpellier", "Oyonnax", "Racing-92", "Toulon", "Pau", "Paris", "La-Rochelle", "Toulouse", "Bordeaux-begles", "Perpignan"]
-      break;
-    case "prod2":
-      clubs = ["Agen", "Aurillac", "Beziers", "Biarritz", "Brive", "Colomiers", "Dax", "Grenoble", "Mont-de-Marsan", "Provence-Rugby", "Rouen", "Angouleme", "Montauban", "Nevers", "Valence-Romans", "Vannes"]
-      break;
-    default:
-      clubs = ["Angleterre", "France", "Irlande", "Italie", "Ecosse", "Pays de Galles"]
-      break;
-  }
-
-  function setUpStandings() {  
-    const standings = []
-    const ind = []
-    for (let i = 0; i < dataTeams.length; i++) {
-      for (let j = 0; j < dataTeams.length; j++) {
-        if (dataStandings.standings[0].teams[i].name == dataTeams[j].name) {
-          ind.push(j)
-        }
-      }
-    }
-    for (let i of ind) {
-      standings.push(clubs[i])
-    }
-    return standings
   }
 
   function setUpMatches() {
@@ -101,7 +81,6 @@ const Top14 = () => {
     return [matches, home, away]
   }
 
-  if (currentTab === "Standings") {setUpStandings()}
   if (currentTab === "Matches") {var res = setUpMatches()}
   
   return (
@@ -109,13 +88,13 @@ const Top14 = () => {
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={false} />
       <div className="w-full border-t relative">
         {currentTab === "Teams" && (
-          <div className={`grid ${route.pathname.split('/')[2].includes("14") ? "grid-cols-5" : "grid-cols-6"} gap-4 p-5`}>
-            {clubs.map((club, index) => (
+          <div className={`grid grid-cols-${Math.floor(dataTeams.length / 3) + 1} gap-4 p-5`}>
+            {dataTeams.map((club, index) => (
               <TeamCard 
                 key={index} 
-                name={club} 
+                name={club.name} 
                 index={index} 
-                image={route.pathname.split('/')[2]  === "sixnations" ? `../src/assets/${dataTeams[index].name}.png` : `https://cdn.lnr.fr/club/${club}/photo/logo.bf3916f6c3950e6f8db29a8382a5f08159c542ad`}
+                image={route.pathname.split('/')[2]  === "sixnations" ? `../src/assets/${dataTeams[index].name}.png` : club.logo}
                 id={''} 
               />
             ))}
@@ -132,22 +111,22 @@ const Top14 = () => {
                         <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
                         <th scope="col" className="px-6 py-4 text-lg border-r">Matchs Joués</th>
                         <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Défaites - Egalités</th>
-                        <th scope="col" className="px-6 py-4 text-lg border-r">Bonus Offensif + Bonus Défensif</th>
-                        <th scope="col" className="px-6 py-4 text-lg">Points</th>
+                        <th scope="col" className="px-6 py-4 text-lg border-r">Points</th>
+                        <th scope="col" className="px-6 py-4 text-lg">DP</th>
                       </tr>
                     </thead>
-                    {dataStandings.standings[0].teams.map((team, index) => (
-                      <tbody key={index}>
+                    {dataStandings.map((team, index) => (
+                      <tbody key={index} title={index}>
                         <tr className="text-xl hover:bg-base-300">
                           <td className="text-left flex flex-row border-r relative pl-2 items-center">
                             <span>{team.position}&nbsp;</span>
-                            <img className="w-10 h-10 p-1" src={route.pathname.split('/')[2]  === "sixnations" ? `../src/assets/${team.name}.png` : `https://cdn.lnr.fr/club/${setUpStandings()[index]}/photo/logo.bf3916f6c3950e6f8db29a8382a5f08159c542ad`} alt="" />
-                            <span className="hover:cursor-pointer hover:underline">{route.pathname.split('/')[2]  === "sixnations" ? setUpStandings()[index] : team.name}</span>
+                            <img className="w-10 h-10 p-1" src={team.team.logo} alt="" />
+                            <span className="hover:cursor-pointer hover:underline">{team.team.name}</span>
                           </td>
-                          <td className="border-r">{team.played}</td>
-                          <td className="border-r">{team.won} - {team.lost} - {team.drawn}</td>
-                          <td className="border-r">{team.try_bonus} + {team.losing_bonus}</td>
-                          <td>{team.points}</td>
+                          <td className="border-r">{team.games.played}</td>
+                          <td className="border-r">{team.games.win.total} - {team.games.lose.total} - {team.games.draw.total}</td>
+                          <td className="border-r">{team.points}</td>
+                          <td>{team.goals.for - team.goals.against}</td>
                         </tr>
                       </tbody>
                     ))}
