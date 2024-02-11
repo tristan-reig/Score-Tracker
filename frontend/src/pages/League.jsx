@@ -23,13 +23,13 @@ const League = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`https://scoretracker-c2xt.onrender.com/${leagueId}/teams`)
+        var response = await axios.get(`http://localhost:3001/league/${leagueId}/teams`)
         setDataTeams(response.data.message)
         var tournamentObj = response.data.message[0]
         if (tournamentObj.name !== "Regular Season") {tournamentObj = response.data.message[1]}
-        response = await axios.get(`https://scoretracker-c2xt.onrender.com/${tournamentObj.id}/standings`)
+        response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/standings`)
         setDataStandings(response.data.message)
-        response = await axios.get(`https://scoretracker-c2xt.onrender.com/${tournamentObj.id}/matches`)
+        response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/matches`)
         setDataMatches(response.data.message)
       } catch (error) {
         console.log(error)

@@ -9,7 +9,7 @@ const Bracket = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`https://scoretracker-c2xt.onrender.com/10993/bracket`)
+        var response = await axios.get(`http://localhost:3001/league/10993/bracket`)
         setdataBracket(response.data.message);
       } catch (error) {
         console.log(error)

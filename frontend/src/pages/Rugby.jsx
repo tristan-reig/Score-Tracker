@@ -14,38 +14,21 @@ const Top14 = () => {
   const [dataStandings, setDataStandings] = useState(null)
   const [dataMatches, setDataMatches] = useState(null)
   const [week, setWeek] = useState(0)
-  const [leagueId, setLeagueId] = useState([])
+  const [leagueId, setLeagueId] = useState(0)
   const [queryParameters] = useSearchParams()
-  var route = useLocation()
-  var clubs = []
 
   // eslint-disable-next-line no-unused-vars
-  const updateLeagueId = useMemo(() => setLeagueId([queryParameters.get("id1"), queryParameters.get("id2")]), [queryParameters])
+  const updateLeagueId = useMemo(() => setLeagueId(queryParameters.get("id")), [queryParameters])
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const options = {
-          method: 'GET',
-          params : {
-            season : '2023',
-            league : leagueId[1],
-
-          },
-          headers: {
-            "X-RapidAPI-Key": "0d6af37ed6mshe1e1da9a44bf621p1d5813jsn3f193721113d",
-            "X-RapidAPI-Host": "api-rugby.p.rapidapi.com"
-          }
-        };
-        options['url'] = `https://api-rugby.p.rapidapi.com/teams`
-        var response = await axios.request(options);
-        setDataTeams(response.data.response);
-        options['url'] = `https://api-rugby.p.rapidapi.com/standings`
-        response = await axios.request(options);
-        setDataStandings(response.data.response[0]);
-        options['url'] = `https://rugby-live-data.p.rapidapi.com/fixtures/${leagueId[0]}/2024`
-        response = await axios.request(options);
-        setDataMatches(response.data.results);
+        var response = await axios.request(`http://localhost:3001/rugby/${leagueId}/teams`);
+        setDataTeams(response.data.message);
+        response = await axios.request(`http://localhost:3001/rugby/${leagueId}/standings`);
+        setDataStandings(response.data.message);
+        response = await axios.request(`http://localhost:3001/rugby/${leagueId}/matches`);
+        setDataMatches(response.data.message);
       } catch (error) {
         console.log(error)
       }
@@ -53,35 +36,14 @@ const Top14 = () => {
     fetchData()
   },[leagueId]);
 
-  if (!dataTeams) {
+  if (!dataTeams || !dataStandings) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <SkeletonTeamCard length={14} column={5} />
     </div>
   }
 
-  function setUpMatches() {
-    const home = []
-    const away = []
-    const matches = []
-    for (let i = 0; i < dataMatches.length; i++) {
-      if (dataMatches[i].game_week === week + 1) {
-        matches.push(dataMatches[i])
-      }
-    }
-    for (let i = 0; i < matches.length; i++) {
-      for (let j = 0; j < dataTeams.length; j++) {
-        if (matches[i].home === dataTeams[j].name) {
-          home.push(clubs[j])
-        } else if (matches[i].away === dataTeams[j].name) {
-          away.push(clubs[j])
-        }
-      }
-    }
-    return [matches, home, away]
-  }
-
-  if (currentTab === "Matches") {var res = setUpMatches()}
+  console.log(dataMatches)
   
   return (
     <div className="mt-5">
@@ -94,7 +56,7 @@ const Top14 = () => {
                 key={index} 
                 name={club.name} 
                 index={index} 
-                image={route.pathname.split('/')[2]  === "sixnations" ? `../src/assets/${dataTeams[index].name}.png` : club.logo}
+                image={club.logo}
                 id={''} 
               />
             ))}
@@ -116,11 +78,11 @@ const Top14 = () => {
                       </tr>
                     </thead>
                     {dataStandings.map((team, index) => (
-                      <tbody key={index} title={index}>
+                      <tbody key={index}>
                         <tr className="text-xl hover:bg-base-300">
                           <td className="text-left flex flex-row border-r relative pl-2 items-center">
                             <span>{team.position}&nbsp;</span>
-                            <img className="w-10 h-10 p-1" src={team.team.logo} alt="" />
+                            <img className="w-10 h-lg p-1" src={team.team.logo.includes("/0.png") ? team.team.logo.replace("/0.png", "/100.png") : team.team.logo} alt="" />
                             <span className="hover:cursor-pointer hover:underline">{team.team.name}</span>
                           </td>
                           <td className="border-r">{team.games.played}</td>
@@ -136,7 +98,7 @@ const Top14 = () => {
             </div>
           </div>
         )}
-        {currentTab === "Matches" && (
+        {/* {currentTab === "Matches" && (
           res[0].map((match, index) => (
             <div key={match.id}>
               <div className="container mx-auto flex flex-row justify-center items-center relative border-b p-2">
@@ -173,7 +135,7 @@ const Top14 = () => {
               {index === res[0].length - 1 && <Pagination length={dataMatches.length / res[0].length - 1} setWeek={setWeek} week={week} />}
             </div>
           ))
-        )}
+        )} */}
       </div>
     </div>
   )

@@ -1,12 +1,10 @@
-import requests
+import http.client
 
-url = "https://api.pandascore.co/lives?page=&per_page=50"
+conn = http.client.HTTPSConnection("api.sportradar.us")
 
-headers = {
-    "accept": "application/json",
-    "authorization": "Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes"
-}
+conn.request("GET", "/rugby-league/trial/v3/fr/competitions.json?api_key=erkz7fxhwsv4rr2zxz93j8e4")
 
-response = requests.get(url, headers=headers)
+res = conn.getresponse()
+data = res.read()
 
-print(response.text)
+print(data.decode("utf-8"))
