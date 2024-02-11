@@ -1,7 +1,9 @@
-import Banner from "../components/Banner"
+import React from 'react'
 
 const Test = () => {
-  return <Banner />
+  return (
+    <div>Test</div>
+  )
 }
 
 export default Test

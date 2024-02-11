@@ -14,7 +14,6 @@ export default function Home() {
   sessionStorage.clear()
   return (
     <>
-      <Banner />
       <Hero/>
       <div className="grid grid-cols-4 p-5 gap-10">
           <Link to="/league/lec?id=4197" className="mx-auto">
