@@ -11,6 +11,15 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        'gold1' : "#5d4a1f",
+        'gold2' : "#9f7928",
+        'gold3' : "#da9100",
+        'silver1' : "#4D4855",
+        'silver2' : "#4D4855",
+        'bronze1' : "#5A2D00",
+        'bronze2' : "#804000",
+      },
       fontFamily: {
         'title' : ["Gobold Thin"],
         'pseudo' : ["Industry Bold"]

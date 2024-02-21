@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
+import { parse } from 'node-html-parser';
 
 const app = express();
 app.use(cors());
@@ -13,34 +14,65 @@ const optionsPanda = {
   },
 };
 
-const optionsRugby = {
-  method: 'GET',
-  params : {
-    season : '2023',
-  },
-  headers: {
-    "X-RapidAPI-Key": "0d6af37ed6mshe1e1da9a44bf621p1d5813jsn3f193721113d",
-    "X-RapidAPI-Host": "api-rugby.p.rapidapi.com"
-  }
-};
-
 // Rugby Routes
 
-app.get('/rugby/:LeagueId/teams', async(req, res) => {
-  optionsRugby['params']['league'] = req.params.LeagueId;
-  optionsRugby['url'] = "https://api-rugby.p.rapidapi.com/teams"
-  const response = await axios.request(optionsRugby)
-  res.json({message: response.data.response})
+app.get('/rugby/teams', async(req, res) => {
+  const [resp, teamTab] = [{}, []]
+  const response = await axios.get(`https://top14.lnr.fr/clubs`)
+  const root = parse(response.data)
+  root.querySelectorAll(".club-card__logo-img").map((team) => {
+    teamTab.push(resp[team.attributes.alt] = team.attributes.src)
+  })
+  res.json(resp)
 })
 
-app.get('/rugby/:LeagueId/standings', async(req, res) => {
-  optionsRugby['url'] = "https://api-rugby.p.rapidapi.com/standings"
-  const response = await axios.request(optionsRugby)
-  res.json({message: response.data.response[0]})
+app.get('/rugby/standings', async(req, res) => {
+  var [resp, teamTab] = [{}, []]
+  const response = await axios.get(`https://top14.lnr.fr/classement`)
+  const root = parse(response.data)
+  root.querySelectorAll(".table-line__cell-image").map((team) => {
+    teamTab.push(resp[team.attributes.alt] = team.attributes.src)
+  })
+  teamTab = []
+  root.querySelectorAll(".table-line--ranking-scrollable").map((team, index) => {
+    for (let i = 3; i <= 13; i += 2) {
+      teamTab.push(team.childNodes[i].innerText.trim())
+    }
+    resp[team.childNodes[1].innerText.trim()] = [root.querySelectorAll('.table-line__cell-image')[index].attributes.src].concat(teamTab)
+    teamTab = []
+  })
+  res.json(resp)
 })
 
-app.get('/rugby/:LeagueId/matches', async(req, res) => {
-  res.json({message: "test"})
+app.get('/rugby/bstandings', async(req, res) => {
+  const [resp] = [{}]
+  const response = await axios.get(`https://www.allrugby.com/competitions/top-14/classement-britannique.html`)
+  const root = parse(response.data)
+  root.querySelectorAll('tbody')[0].querySelectorAll('tr').map((team, index) => {
+    team.childNodes.length > 2 && (resp[team.childNodes[3].innerText.trim()] = 1)
+  })
+  console.log(root.querySelectorAll('img')[2].attributes.src)
+  res.json(resp)
+})
+
+app.get('/rugby/matches', async(req, res) => {
+  const [resp, matchDict, homeTab, awayTab, infosTab] = [{}, {}, [], [], []]
+  const response = await axios.get(`https://top14.lnr.fr/calendrier-et-resultats/${req.query.week && `2023-2024/j${req.query.week}`}`)
+  const root = parse(response.data)
+  var currentDay = root.querySelector(".calendar-results__fixture-date").innerHTML.trim()
+  root.querySelectorAll(".club-line").map((club, index) => index % 2 === 0 ? 
+  homeTab.push([club.childNodes[3].childNodes[0].innerText.trim(), club.childNodes[1].childNodes[1]._attrs.src]) : 
+  awayTab.push([club.childNodes[3].childNodes[0].innerText.trim(), club.childNodes[1].childNodes[1]._attrs.src]))
+  root.querySelectorAll(".calendar-results__line").map((match, index) => {
+    match.previousElementSibling.childNodes[0].rawText.trim().includes("samedi") || match.previousElementSibling.childNodes[0].rawText.trim().includes("dimanche") &&
+    (currentDay = match.previousElementSibling.childNodes[0].rawText.trim())
+    infosTab.push([currentDay, root.querySelectorAll(".match-line__score")[index].innerHTML.trim()])
+  })
+  matchDict["home"] = homeTab
+  matchDict["away"] = awayTab
+  matchDict["infos"] = infosTab
+  resp[root.querySelector(".calendar-results__title").innerHTML.trim().split(' ')[1]] = matchDict
+  res.json(resp)
 })
 
 // League Routes

@@ -26,7 +26,8 @@ const League = () => {
         var response = await axios.get(`http://localhost:3001/league/${leagueId}/teams`)
         setDataTeams(response.data.message)
         var tournamentObj = response.data.message[0]
-        if (tournamentObj.name !== "Regular Season") {tournamentObj = response.data.message[1]}
+        console.log(tournamentObj.name)
+        if (tournamentObj.name !== "Group Stage" && tournamentObj.name !== "Regular Season") {tournamentObj = response.data.message[1]}
         response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/standings`)
         setDataStandings(response.data.message)
         response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/matches`)

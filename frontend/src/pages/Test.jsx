@@ -7,8 +7,8 @@ const Test = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`http://localhost:3001/`)
-        setData(response.data.message)
+        var response = await axios.get(`http://localhost:3001/rugby/bstandings`)
+        setData(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -18,10 +18,12 @@ const Test = () => {
 
   console.log(data)
 
-  if (data) {
+  if (!data) {
     return (
-      <div>Test</div>
+      <div>Attente</div>
     )
+  } else {
+    return <div>Test</div>
   }
 }
 
