@@ -8,6 +8,7 @@ import Rugby from "./pages/Rugby";
 import League from "./pages/League";
 import Draft from "./pages/Draft";
 import Ligue1 from "./pages/Ligue1";
+import Valorant from "./pages/Valorant";
 
 export default function App() {
   return (
@@ -30,6 +31,9 @@ export default function App() {
         </Route>
         <Route path="/league/:league" element={<Layout />}>
           <Route index element={<League />}/>
+        </Route>
+        <Route path="/valorant/:league" element={<Layout />}>
+          <Route index element={<Valorant />}/>
         </Route>
         <Route path="/draft" element={<Layout />}>
           <Route index element={<Draft />}/>

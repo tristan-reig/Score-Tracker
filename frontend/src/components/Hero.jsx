@@ -10,6 +10,7 @@ const Hero = () => {
   const handleShow = useCallback(() => {
     ref.current?.showModal()
   }, [ref])
+
   return (
   <section className="bg-gray-800 2xl:h-[35vh]">
       <div className="py-16 px-4 mx-auto max-w-screen-xl text-center">

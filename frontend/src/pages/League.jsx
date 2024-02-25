@@ -7,7 +7,6 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import SkeletonTeamCard from '../components/SkeletonTeamCard'
 import Bracket from '../components/Bracket'
-import Pagination from '../components/Pagination'
 
 const League = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
@@ -24,14 +23,13 @@ const League = () => {
     const fetchData = async () => {
       try {
         var response = await axios.get(`http://localhost:3001/league/${leagueId}/teams`)
-        setDataTeams(response.data.message)
-        var tournamentObj = response.data.message[0]
-        console.log(tournamentObj.name)
+        setDataTeams(response.data)
+        var tournamentObj = response.data[0]
         if (tournamentObj.name !== "Group Stage" && tournamentObj.name !== "Regular Season") {tournamentObj = response.data.message[1]}
         response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/standings`)
-        setDataStandings(response.data.message)
+        setDataStandings(response.data)
         response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/matches`)
-        setDataMatches(response.data.message)
+        setDataMatches(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -77,14 +75,14 @@ const League = () => {
                           <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
                           <th scope="col" className="px-6 py-4 text-lg border-r">Matchs Joués</th>
                           <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Défaites</th>
-                          <th scope="col" className="px-6 py-4 text-lg border-r">Points</th>
+                          <th scope="col" className="px-6 py-4 text-lg">Points</th>
                         </tr>
                       </thead>
                       {dataStandings.map((team, index) => (
                         <tbody key={index} className={`${index === 0 && ""}`}>
                           <tr className="text-xl hover:bg-base-300 w-full">
-                            <td className='border-r'>
-                              {index + 1 === team.rank ? team.rank : "-"}&nbsp;
+                            <td className={`border-r ${index < 6 && 'bg-blue-900 text-white'}`}>
+                              <span className={`px-2`}>{index + 1 === team.rank ? team.rank : "-"}&nbsp;</span>
                             </td>
                             <td className="text-left flex flex-row border-r relative pl-2 items-center">
                               <img className="w-lg h-10 m-1 p-1" src={team.team.image_url} alt="" />
@@ -92,7 +90,7 @@ const League = () => {
                             </td>
                             <td className="border-r">{team.total}</td>
                             <td className="border-r">{team.wins} - {team.losses}</td>
-                            <td className="border-r">{team.wins}</td>
+                            <td className="">{team.wins}</td>
                           </tr>
                         </tbody>
                       ))}
@@ -146,7 +144,13 @@ const League = () => {
                   </div>
                 </div>
               </div>
-              {index === 4 && <Pagination length={dataMatches.length / 5} setWeek={setWeek} week={week} />}
+              {index === 4 && (
+                  <div className="flex items-center justify-center join py-5 pr-3">
+                  {Array.from({length: dataMatches.length / 5}).map((_, index) => (
+                    <button key={index} onClick={() => setWeek(index)} className={`join-item btn ${week === index && "btn-active"}`}>{index + 1}</button>
+                  ))}
+                </div>
+              )}
             </div>
           ))
         )}

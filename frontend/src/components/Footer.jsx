@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="footer items-center p-4 text-neutral-content bg-gray-900 h-[10vh]">
+    <footer className="footer items-center p-4 text-neutral-content bg-gray-900">
       <aside className="items-center grid-flow-col">
         <p className="2xl:text-base">Copyright © {new Date().getFullYear()} - Skiifig</p>
       </aside>

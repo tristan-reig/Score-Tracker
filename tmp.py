@@ -1,10 +1,17 @@
-import http.client
+import requests
 
-conn = http.client.HTTPSConnection("api.sportradar.us")
+url = "https://api.pandascore.co/series/7178"
 
-conn.request("GET", "/rugby-league/trial/v3/fr/competitions.json?api_key=erkz7fxhwsv4rr2zxz93j8e4")
+headers = {
+    "accept": "application/json",
+    "authorization": "Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes"
+}
 
-res = conn.getresponse()
-data = res.read()
+response = requests.get(url, headers=headers)
 
-print(data.decode("utf-8"))
+data = response.json()
+
+for i in range(3):
+    print(data["tournaments"][i]["id"])
+
+# league_id = 4531 | serie_id : 7178 | A : 12817 | B : 12818 | C : 12819

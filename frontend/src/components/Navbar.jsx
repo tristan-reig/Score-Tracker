@@ -10,7 +10,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-gray-900 2xl:h-[10vh]">
+    <div className="navbar bg-gray-900">
       <div className="navbar-start">
         <a className="p-3 text-xl 2xl:text-2xl font-bold" href='/'>ScoreTracker</a>
         <a href="/" className="w-10 2xl:w-12">

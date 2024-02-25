@@ -7,23 +7,12 @@ import SkeletonTeamCard from "../components/SkeletonTeamCard";
 const Ligue1 = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
   const [dataTeams, setDataTeams] = useState(null)
-  const [dataStandings, setDataStandings] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const options = {
-          method: 'GET',
-          url: 'https://ligue-1-standings.p.rapidapi.com/',
-          headers: {
-            'X-RapidAPI-Key': '0d6af37ed6mshe1e1da9a44bf621p1d5813jsn3f193721113d',
-            'X-RapidAPI-Host': 'ligue-1-standings.p.rapidapi.com'
-          }
-        };
-        var response = await axios.request("https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=French%20Ligue%201");
+        var response = await axios.request(`http://localhost:3001/football/teams`);
         setDataTeams(response.data);
-        response = await axios.request(options)
-        setDataStandings(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -31,14 +20,14 @@ const Ligue1 = () => {
     fetchData()
   },[]);
 
-  if (!dataTeams || !dataStandings) {
+  if (!dataTeams) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <SkeletonTeamCard length={18} column={6} />
     </div>
   }
 
-  console.log(dataStandings)
+  console.log(dataTeams)
   
   return (
     <div className="mt-5">
@@ -46,12 +35,12 @@ const Ligue1 = () => {
       <div className="w-full border-t relative">
         {currentTab === "Teams" && (
           <div className="grid grid-cols-6 gap-4 p-5">
-            {Array.from({length: dataTeams.teams.length}).map((_, index) => (
+            {Object.keys(dataTeams).map((team, index) => (
               <TeamCard 
-                key={index} 
-                name={dataTeams.teams[index].strAlternate.split(',')[0].split(' ').length <= 2 ? dataTeams.teams[index].strAlternate.split(',')[0] : dataTeams.teams[index].strStadiumLocation.split(',')[0]} 
-                index={index} image={dataTeams.teams[index].strTeamBadge} 
-                id={''} 
+                key={index}
+                name={team} 
+                index={index} 
+                image={dataTeams[team]} 
               />
             ))}
           </div>
