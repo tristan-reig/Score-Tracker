@@ -25,7 +25,10 @@ const League = () => {
         var response = await axios.get(`http://localhost:3001/league/${leagueId}/teams`)
         setDataTeams(response.data)
         var tournamentObj = response.data[0]
-        if (tournamentObj.name !== "Group Stage" && tournamentObj.name !== "Regular Season") {tournamentObj = response.data.message[1]}
+        if (response.data[1].serie.full_name == "Winter 2024") {
+          tournamentObj = response.data[2]
+        }
+        console.log(tournamentObj.id)
         response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/standings`)
         setDataStandings(response.data)
         response = await axios.get(`http://localhost:3001/league/${tournamentObj.id}/matches`)
@@ -39,11 +42,10 @@ const League = () => {
 
   if (!dataTeams || !dataStandings || !dataMatches) {
     return <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={true} disabled={true} />
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={false} disabled={true} />
       <SkeletonTeamCard length={10} column={4} />
     </div>
   }
-
 
   for (let i = 0; i < dataTeams.length; i++) {
     if (dataTeams[i]["begin_at"].includes("2024")) {
@@ -53,7 +55,7 @@ const League = () => {
 
   return (
     <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={true} disabled={false} />
+      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={false} disabled={false} />
       <div className="w-full border-t">
         {currentTab === "Teams" && (
           <div className="grid grid-cols-4 gap-4 p-5">
@@ -98,11 +100,13 @@ const League = () => {
                   </div>
                 </div>
               </div>
-              {route.pathname.split('/')[2] === "lfl" && route.pathname && <div className="absolute flex justify-between right-10 top-1/2">
-                <a href="#slide2" className="btn btn-circle">{">"}</a>
-              </div>}
+              {["lfl", "superliga"].includes(route.pathname.split('/')[2]) && route.pathname && (
+                <div className="absolute flex justify-between right-10 top-1/2">
+                  <a href="#slide2" className="btn btn-circle">{">"}</a>
+                </div>
+              )}
             </div>
-            {route.pathname.split('/')[2] === "lfl" && <div id='slide2' className="flex flex-col overflow-x-hidden p-5 carousel-item relative w-full">
+            {["lfl", "superliga"].includes(route.pathname.split('/')[2]) && <div id='slide2' className="flex flex-col overflow-x-hidden p-5 carousel-item relative w-full">
               <Bracket />
               <div className="absolute flex justify-between left-5 top-1/2">
                 <a href="#slide1" className="btn btn-circle">{"<"}</a>
@@ -153,12 +157,6 @@ const League = () => {
               )}
             </div>
           ))
-        )}
-        {currentTab === "Live" && (
-          <div className='flex flex-row'>
-            <iframe src="https://player.twitch.tv/?channel=otplol_&parent=localhost" allowFullScreen={true} height={"650"} width={"1200"}></iframe>
-            <iframe id="chat_embed" src="https://www.twitch.tv/embed/otplol_/chat?parent=localhost&darkpopout" height={"650"} width={window.screen.width - "1200"}></iframe>
-          </div>
         )}
       </div>
     </div>

@@ -30,9 +30,9 @@ const Top14 = () => {
       }
     }
     fetchData()
-  },[route]);
+  },[route, week, setWeek]);
 
-  if (!dataTeams || !dataStandings || !dataMatches) {
+  if (!dataTeams) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <SkeletonTeamCard length={14} column={5} />
@@ -59,7 +59,7 @@ const Top14 = () => {
         {currentTab === "Standings" && (
           <div className="w-full carousel">
             <div id='classementG' className="flex flex-col carousel-item relative w-full">
-              <StandingsContainer type="g" title="Saison Régulière">
+              <StandingsContainer comp={route.pathname.split('/')[2]} type="g" title="Saison Régulière">
                 <tbody>
                   {Object.keys(dataStandings).map((team, index) => (
                     <tr key={index} className='text-xl hover:bg-base-300'>
@@ -67,10 +67,20 @@ const Top14 = () => {
                         ${index < 2 ? 'bg-blue-950' : ''} 
                         ${index === Object.keys(dataStandings).length - 2 ? 'bg-red-900' : ''} 
                         ${index === Object.keys(dataStandings).length - 1 ? 'bg-red-950' : ''}`}>{index + 1}</td>
-                      <td className="text-left flex flex-row border-r relative pl-2 items-center">
+                      <td className={`text-left flex flex-row relative pl-2 items-center ${route.pathname.split('/')[2] === "top14" ? "" : "border-r"}`}>
                         <img className="w-10 p-1" src={dataStandings[team][0]} alt="" />
                         <span className="hover:cursor-pointer hover:underline">{team}</span>
                       </td>
+                      {route.pathname.split('/')[2] === 'top14' && (
+                        <td className="border-r border-l">
+                          <img 
+                            className="w-10 flex mx-auto" 
+                            src={dataStandings[team][7].includes("Challenge") ? "https://upload.wikimedia.org/wikipedia/fr/6/69/Logo_Challenge_Cup_2021.png" : "https://upload.wikimedia.org/wikipedia/fr/9/9a/Logo_Champions_Cup_2018.png"} 
+                            alt="" 
+                            title={dataStandings[team][7]}
+                          />
+                        </td>
+                      )}
                       <td className="border-r">{dataStandings[team][2]}</td>
                       <td className="border-r">{dataStandings[team][3]} - {dataStandings[team][4]} - {dataStandings[team][5]}</td>
                       <td className="border-r">{dataStandings[team][6]}</td>
@@ -83,7 +93,7 @@ const Top14 = () => {
           </div>
         )}
         {currentTab === "Matches" && (
-          Array.from({length : 7}).map((_, index) => (
+          Array.from({length : Object.keys(dataMatches[week]["home"]).length}).map((_, index) => (
             <div key={index}>
               <div className="container mx-auto flex flex-row justify-center items-center relative p-2 border-b">
                 <div className="absolute bottom-50 left-0 pr-2 pb-1">
@@ -92,7 +102,7 @@ const Top14 = () => {
                   <div>{dataMatches[week]["infos"][index][1].includes('h') && dataMatches[week]["infos"][index][1]}</div>
                 </div>
                 <div className="absolute bottom-50 right-0 pr-2 pb-1">
-                  <button className="btn bg-amber-600 text-black">Détails</button>
+                  <button className="btn bg-amber-600 hover:bg-amber-500 text-black">Détails</button>
                 </div>
                 <div className="home flex flex-row items-center px-6">
                   <div className="items-center flex flex-col">
@@ -110,7 +120,9 @@ const Top14 = () => {
                   </div>
                 </div>
               </div>
-              {index === 6 && <Pagination length={26} setWeek={setWeek} week={week} comp={route.pathname.split('/')[2]} setDataMatches={setDataMatches} />}
+              {index === Object.keys(dataMatches[week]["home"]).length - 1 && (
+                <Pagination length={(Object.keys(dataTeams).length - 1) * 2} setWeek={setWeek} week={week} comp={route.pathname.split('/')[2]} setDataMatches={setDataMatches} />)
+              }
             </div>
           ))
         )}

@@ -83,7 +83,7 @@ const Draft = () => {
           {Array.from({length : 166 % 15}).map((_, index1) => (
             <div key={index1} className="flex flex-row justify-center">
               {Array.from({length : 166 % 15}).map((_, index2) => (
-                <img 
+                <img
                   draggable='true'
                   onDragStart={(event) => event.dataTransfer.setData('index', event.target.alt)}
                   alt={165 - 15 * index1 + index2}

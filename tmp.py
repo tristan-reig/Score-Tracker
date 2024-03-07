@@ -1,6 +1,6 @@
 import requests
 
-url = "https://api.pandascore.co/series/7178"
+url = "https://api.pandascore.co/lol/matches/900376"
 
 headers = {
     "accept": "application/json",
@@ -11,7 +11,6 @@ response = requests.get(url, headers=headers)
 
 data = response.json()
 
-for i in range(3):
-    print(data["tournaments"][i]["id"])
+print(data)
 
 # league_id = 4531 | serie_id : 7178 | A : 12817 | B : 12818 | C : 12819

@@ -5,9 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
-    {pattern: /bg-(red|green|emerald|blue|yellow|orange|gray|pink)-(100|200|300|400|500|600|700|800|900)/},
+    {pattern: /bg-(red|green|emerald|blue|yellow|orange|gray|pink|lime|amber|purple|cyan)-(100|200|300|400|500|600|700|800|900|950)/},
+    {pattern: /from-(red|green|emerald|blue|yellow|orange|gray|pink|lime|amber|purple|cyan)-(100|200|300|400|500|600|700|800|900|950)/},
+    {pattern: /via-(red|green|emerald|blue|yellow|orange|gray|pink|lime|amber|purple|cyan)-(100|200|300|400|500|600|700|800|900|950)/},
+    {pattern: /to-(red|green|emerald|blue|yellow|orange|gray|pink|lime|amber|purple|cyan)-(100|200|300|400|500|600|700|800|900|950)/},
     {pattern: /mt-(1|2|3|4|5|6|7|8|9|10)4/},
-    {pattern: /grid-cols-(3|4|5|6)/},
+    {pattern: /grid-cols-(3|4|5|6|7|8)/},
   ],
   theme: {
     extend: {

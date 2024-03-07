@@ -7,7 +7,7 @@ const Select = (props) => {
         onClick={() => props.disabled == false && props.setCurrentTab("Teams")}
       >Equipes
       </div>
-      <div 
+      <div
         className={`element border w-full p-5 text-xl border-b-0 ${props.disabled ? 'cursor-not-allowed' : 'cursor-pointer'} hover:bg-black ${props.currentTab === "Standings" ? "bg-black" : ""}`} 
         onClick={() => props.disabled == false && props.setCurrentTab("Standings")}
       >Classement

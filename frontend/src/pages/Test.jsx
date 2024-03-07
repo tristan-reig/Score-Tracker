@@ -7,7 +7,7 @@ const Test = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`http://localhost:3001/valorant/7178/teams`)
+        var response = await axios.get(`http://localhost:3001/rugby/challenge-cup/teams`)
         setData(response.data)
       } catch (error) {
         console.log(error)
@@ -16,15 +16,17 @@ const Test = () => {
     fetchData()
   }, []);
 
-  console.log(data)
-
   if (!data) {
     return (
       <div>Attente</div>
     )
-  } else {
-    return <div>Test</div>
   }
+
+  console.log(data)
+
+  return (
+    <div>Test</div>
+  )
 }
 
 export default Test

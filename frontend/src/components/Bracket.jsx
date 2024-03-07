@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useState, useEffect } from "react"
+import TBD from "../assets/TBD.png"
 
-const Bracket = () => {
+const Bracket = (props) => {
   const [dataBracket, setdataBracket] = useState(null)
-  const cases = [15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12]
+  const [cases, setCases] = useState([])
   var res = {}
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`http://localhost:3001/league/10993/bracket`)
+        props.length === 6 ? setCases([15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12]) : setCases([0, 10, 20, 30, 40])
+        var response = await axios.get(`http://localhost:3001/league/10992/bracket`)
         setdataBracket(response.data.message);
       } catch (error) {
         console.log(error)
@@ -17,12 +19,12 @@ const Bracket = () => {
     }
     fetchData()
   },[]);
-
+  
   if (!dataBracket) {
     return <div></div>
   }
 
-  for (let i=0; i<12; i++) {
+  for (let i=0; i<dataBracket.length*2; i++) {
     var somme = 0
     var idTeam = dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.id
     for (let j=0; j<dataBracket[Math.floor(i / 2)].games.length; j++) {
@@ -34,32 +36,45 @@ const Bracket = () => {
   }
 
   return (
-    <div className="grid grid-cols-4">
-      {Array.from({length : 32}).map((_, index) => (
-        <div
-          key={index} 
-          className={
-            `${cases.includes(index) ? "border" : ""}
-            ${[1, 8, 15, 17, 24, 26].includes(index) ? "border-b-0" : ""}
-            ${[5, 12, 19, 21, 28, 30].includes(index) ? "border-t-0" : ""}
-            ${[6].includes(index) ? "border-t" : ""}
-            ${[7, 13, 22, 23].includes(index) ? "border-t border-r w-[50%]" : ""}
-            ${[11, 25, 27].includes(index) ? "border-b border-r w-[50%]" : ""}
-            ${index % 4 == 3 ? "w-80" : ""}
-            h-[62.5px] flex`} 
-        >
-          {cases.includes(index) && (
-            <span className="flex w-full m-2 items-center justify-between p-2 hover:bg-gray-700 cursor-pointer rounded-md">
-              <div className="flex flex-row items-center gap-3">              
-                <span>{res[cases.findIndex((element) => element === index)][0]}</span>
-                <img className="w-lg h-10" src={`${res[cases.findIndex((element) => element === index)][1]}`} alt="" />
-              </div>
-              <span className="text-xl">{res[cases.findIndex((element) => element === index)][2]}</span>
-            </span>
-          )}
-        </div>
-      ))}
+    props.length === 6 ? (
+      <div className="grid grid-cols-4">
+        {Array.from({length : 32}).map((_, index) => (
+          <div
+            title={index}
+            key={index} 
+            className={
+              `${cases.includes(index) ? "border" : ""}
+              ${[1, 8, 15, 17, 24, 26].includes(index) ? "border-b-0 rounded-t-2xl" : ""}
+              ${[5, 12, 19, 21, 28, 30].includes(index) ? "border-t-0 rounded-b-2xl" : ""}
+              ${[6].includes(index) ? "border-t" : ""}
+              ${[7, 13, 22, 23].includes(index) ? `${index === 23  ? "" : "border-t rounded-tr-2xl"} border-r w-[50%]` : ""}
+              ${[11, 25, 27].includes(index) ? `${index === 11 ? "" : "border-b rounded-br-2xl"} border-r w-[50%]` : ""}
+              ${index % 4 == 3 ? "w-80" : ""}
+              h-[62.5px] flex`} 
+          >
+            {cases.includes(index) && (
+              <span className="flex w-full m-2 items-center justify-between p-2 hover:bg-gray-700 cursor-pointer rounded-md">
+                <div className="flex flex-row items-center gap-3">              
+                  <span>{res ? res[cases.findIndex((element) => element === index)][0] : "TBD"}</span>
+                  <img className="w-lg h-10" src={res ? res[cases.findIndex((element) => element === index)][1] : TBD} alt="" />
+                </div>
+                <span className="text-xl">{res ? res[cases.findIndex((element) => element === index)][2] : '-'}</span>
+              </span>
+            )}
+          </div>
+        ))}
     </div>
+    ) : (
+      <div className="grid grid-cols-5 border">
+        {Array.from({length : 50}).map((_, index) => (
+          <div
+          title={index}
+          key={index} 
+          className={`flex h-[62.5px] ${cases.includes(index) ? "border" : ""}`}>
+          </div>
+        ))}
+      </div>
+    )
   )
 }
 

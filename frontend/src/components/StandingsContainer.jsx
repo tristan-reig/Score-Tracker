@@ -9,11 +9,11 @@ const StandingsTable = (props) => {
               <tr>
                 <th scope="col" className="px-6 py-4 text-lg border-r">Position</th>
                 <th scope="col" className="px-6 py-4 text-lg border-r">Equipe</th>
+                {props.comp === 'top14' && <th scope="col" className="px-6 py-4 text-lg border-r">C.E</th>}
                 {props.type === 'g' && <th scope="col" className="px-6 py-4 text-lg border-r">Match Joués</th>}
                 <th scope="col" className="px-6 py-4 text-lg border-r">Victoires - Egalités - Défaites</th>
                 <th scope="col" className="px-6 py-4 text-lg border-r">{`Bonus ${props.type === 'b' ? ('(Offensif + Défensif)') : ''}`}</th>
                 <th scope="col" className={`px-6 py-4 text-lg ${props.type === 'b' && 'border-r'}`}>Points</th>
-                {props.type === 'b' && <th scope="col" className="px-6 py-4 text-lg">Etat de forme</th>}
               </tr>
             </thead>
             {props.children}

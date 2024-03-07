@@ -17,11 +17,21 @@ const optionsPanda = {
 
 // Rugby Routes
 
+app.get('/rugby/:compName-cup/teams', async(req, res) => {
+  const [resp, teamTab] = [{}, []]
+  const response = await axios.get(`https://www.epcrugby.com/fr/${req.params.compName}-cup/clubs`)
+  const root = parse(response.data)
+  root.querySelectorAll(".gap-x-4").map(team => {
+    teamTab.push(resp[team.querySelector('img').attributes.alt] = team.querySelector('img').attributes.src)
+  })
+  res.json(resp)
+})
+
 app.get('/rugby/:leagueName/teams', async(req, res) => {
   const [resp, teamTab] = [{}, []]
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/clubs`)
   const root = parse(response.data)
-  root.querySelectorAll(".club-card__logo-img").map((team) => {
+  root.querySelectorAll(".club-card__logo-img").map(team => {
     teamTab.push(resp[team.attributes.alt] = team.attributes.src)
   })
   res.json(resp)
@@ -31,6 +41,8 @@ app.get('/rugby/:leagueName/standings', async(req, res) => {
   var [resp, teamTab] = [{}, []]
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/classement`)
   const root = parse(response.data)
+  const response2 = await axios.get(`https://www.epcrugby.com/fr/challenge-cup/clubs`)
+  const root2 = parse(response2.data)
   root.querySelectorAll(".table-line__cell-image").map((team) => {
     teamTab.push(resp[team.attributes.alt] = team.attributes.src)
   })
@@ -39,6 +51,14 @@ app.get('/rugby/:leagueName/standings', async(req, res) => {
     for (let i = 3; i <= 13; i += 2) {
       teamTab.push(team.childNodes[i].innerText.trim())
     }
+    root2.querySelectorAll('.tile').map(cupTeam => {
+      var cupTeamName = cupTeam.childNodes[1].childNodes[1].childNodes[0].rawText
+      var compTeamName =  team.childNodes[1].innerText.trim()
+      if (cupTeamName == compTeamName || cupTeamName.includes(compTeamName) || compTeamName.includes(cupTeamName) || compTeamName.replace(/[^A-Z]/g, '') === cupTeamName) {
+        teamTab.push("Challenge Cup")
+      }
+    })
+    if (!teamTab[6]) teamTab.push('Champions cup')
     resp[team.childNodes[1].innerText.trim()] = [root.querySelectorAll('.table-line__cell-image')[index].attributes.src].concat(teamTab)
     teamTab = []
   })
@@ -107,6 +127,21 @@ app.get('/valorant/:leagueId/teams', async (req, res) => {
   res.json(teamTab)
 });
 
+app.get('/valorant/:leagueId/groups', async (req, res) => {
+  const resp = {};
+  const letters = ['A', 'B', 'C'];
+  optionsPanda['url'] = `https://api.pandascore.co/series/${req.params.leagueId}`
+  const response = await axios.request(optionsPanda);
+  for (const letter of letters) {
+    const tournamentId = response.data.tournaments.find(tournament => tournament.name.includes(letter)).id;
+    optionsPanda['url'] = `https://api.pandascore.co/tournaments/${tournamentId}/standings`
+    const standingsResponse = await axios.request(optionsPanda);
+    const teams = standingsResponse.data.map(team => team);
+    resp["Groupe " + letter] = teams;
+  }
+  res.json(resp);
+});
+
 // League Routes
 
 app.get('/league/:leagueId/teams', async (req, res) => {
@@ -146,7 +181,7 @@ app.get('/pastMaches', async (req, res) => {
 });
 
 app.get('/league/:tournamentId/bracket', async (req, res) => {
-  optionsPanda['url'] = `https://api.pandascore.co/tournaments/10993/brackets`
+  optionsPanda['url'] = `https://api.pandascore.co/tournaments/12823/brackets`
   const response = await axios.request(optionsPanda);
   res.json({message: response.data});
 });
