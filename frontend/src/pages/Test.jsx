@@ -1,32 +1,16 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
+import Carousel from '../components/Carousel'
+
 
 const Test = () => {
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        var response = await axios.get(`http://localhost:3001/rugby/challenge-cup/teams`)
-        setData(response.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchData()
-  }, []);
-
-  if (!data) {
-    return (
-      <div>Attente</div>
-    )
-  }
-
-  console.log(data)
-
   return (
-    <div>Test</div>
-  )
-}
+    <div>
+      <h1>Test</h1>
+      <Carousel>
+        <div className="bg-blue-800 h-64">Saison R</div>
+        <div className="bg-green-800 h-64">Playoffs</div>
+      </Carousel>
+    </div>
+  );
+};
 
 export default Test

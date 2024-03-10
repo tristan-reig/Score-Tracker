@@ -10,7 +10,7 @@ const Bracket = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        props.length === 6 ? setCases([15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12]) : setCases([0, 10, 20, 30, 40])
+        setCases([15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12])
         var response = await axios.get(`http://localhost:3001/league/10992/bracket`)
         setdataBracket(response.data.message);
       } catch (error) {
@@ -18,7 +18,7 @@ const Bracket = (props) => {
       }
     }
     fetchData()
-  },[]);
+  },[props.length]);
   
   if (!dataBracket) {
     return <div></div>
@@ -36,7 +36,6 @@ const Bracket = (props) => {
   }
 
   return (
-    props.length === 6 ? (
       <div className="grid grid-cols-4">
         {Array.from({length : 32}).map((_, index) => (
           <div
@@ -64,18 +63,7 @@ const Bracket = (props) => {
           </div>
         ))}
     </div>
-    ) : (
-      <div className="grid grid-cols-5 border">
-        {Array.from({length : 50}).map((_, index) => (
-          <div
-          title={index}
-          key={index} 
-          className={`flex h-[62.5px] ${cases.includes(index) ? "border" : ""}`}>
-          </div>
-        ))}
-      </div>
     )
-  )
 }
 
 export default Bracket
