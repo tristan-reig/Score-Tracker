@@ -1,6 +1,6 @@
-import { Lec, Lck, Lfl, Superliga, PrimeLeague, 
-  Top, ProD2, ChallengeCup, ChampionsCup, Div2, 
-  Ligue1, 
+import { Lec, Lck, Lfl, Superliga, PrimeLeague, TCL, 
+  Top, ProD2, ChallengeCup, ChampionsCup,
+  Ligue1, PremierLeague,
   Vct,
 } from "../assets/";
 
@@ -17,12 +17,7 @@ export const homeData = [{
   'img' : Lfl,
   'link' : '/league/lfl?id=4292',
   'colors' : ['amber-700', 'gray-400'],
-},
-{
-  'img' : Div2,
-  'link' : '/league/div2?id=4743',
-  'colors' : ['red-100', 'pink-500'],
-}, {
+},{
   'img' : Superliga,
   'link' : '/league/superliga?id=4213',
   'colors' : ['red-800', 'amber-500'],
@@ -30,6 +25,11 @@ export const homeData = [{
   'img' : PrimeLeague,
   'link' : '/league/prime-league?id=4302',
   'colors' : ['blue-500', 'gray-700', 'blue-500'],
+}, 
+{
+  'img' : TCL,
+  'link' : '/league/tcl?id=1003',
+  'colors' : ['red-600', 'cyan-800'],
 }, {
   'img' : Top,
   'link' : '/rugby/top14',
@@ -53,7 +53,7 @@ export const homeData = [{
   'colors' : ['blue-950'],
 },
 {
-  'img' : Vct,
-  'link' : '/valorant/vct-emea?id=7178',
-  'colors' : ['red-400', 'red-700'],
+  'img' : PremierLeague,
+  'link' : '/football/premier-league',
+  'colors' : ['gray-100'],
 },]

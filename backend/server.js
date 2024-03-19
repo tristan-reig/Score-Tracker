@@ -27,6 +27,36 @@ app.get('/rugby/:compName-cup/teams', async(req, res) => {
   res.json(resp)
 })
 
+app.get('/rugby/:compName-cup/groups', async(req, res) => {
+  const [resp] = [{}]
+  var [groupTab, teamTab] = [[], []]
+  const response = await axios.get(`https://www.epcrugby.com/fr/${req.params.compName}-cup/matchs/poules`)
+  const root = parse(response.data)
+  root.querySelectorAll('[name="flip-list"]').map((group, index) => {
+    group.querySelectorAll('tr').map(team => {
+      team.querySelectorAll('td').map((row, index) => {
+        [2, 4, 5, 7, 12].includes(index) && teamTab.push(row.innerText)
+      })
+      teamTab.push(team.querySelector('img')._attrs.src)
+      groupTab.push(teamTab)
+      teamTab = []
+    })
+    resp[`Groupe ${['A', 'B', 'C', 'D'][index]}`] = groupTab
+    groupTab = []
+  })
+  res.json(resp)
+})
+
+app.get('/rugby/:compName-cup/matches', async(req, res) => {
+  const [resp, homeTab, awayTab, infosTab] = [{}, [], [], []]
+  const response = await axios.get('https://www.epcrugby.com/fr/challenge-cup/matchs')
+  const root = parse(response.data)
+  resp["home"] = homeTab
+  resp["away"] = awayTab
+  resp["infos"] = infosTab
+  res.json(resp)
+})
+
 app.get('/rugby/:leagueName/teams', async(req, res) => {
   const [resp, teamTab] = [{}, []]
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/clubs`)
@@ -95,7 +125,7 @@ app.get('/rugby/:leagueName/matches', async(req, res) => {
 
 // Football Routes
 
-app.get('/football/teams', async (req, res) => {
+app.get('/football/ligue1/teams', async (req, res) => {
   const resp = {};
   const response = await axios.get(`https://www.ligue1.fr/clubs/liste`);
   const root = parse(response.data);
@@ -112,6 +142,45 @@ app.get('/football/teams', async (req, res) => {
 
   res.json(resp);
 });
+
+app.get('/football/ligue1/standings', async (req, res) => {
+  const resp = {}
+  var teamTab = []
+  const response = await axios.get('https://www.ligue1.fr/classement')
+  const root = parse(response.data)
+  root.querySelectorAll('.GeneralStats-row').map(team => {
+    teamTab.push(`https://www.ligue1.fr${team.querySelector('img').attributes['data-src']}`)
+    team.querySelectorAll('.GeneralStats-item').map((row, index) => {
+      [2, 3, 4, 5, 6].includes(index) && teamTab.push(row.innerText)
+    })
+    resp[he.decode(team.querySelector('.GeneralStats-item--club').childNodes[3].innerHTML)] = teamTab
+    teamTab = []
+  })
+  res.json(resp)
+})
+
+app.get('/football/ligue1/matches', async (req, res) => {
+  const [resp, matchDict, homeTab, awayTab, infosTab] = [{}, {}, [], [], []]
+  const response = await axios.get(req.query.week ? `https://www.ligue1.fr/calendrier-resultats?matchDay=${req.query.week}` : `https://www.ligue1.fr/calendrier-resultats`)
+  const root = parse(response.data)
+  var currentDay = root.querySelector('.calendar-widget-day').innerText
+  root.querySelectorAll('.calendarTeamNameDesktop').map((team, index) => {
+    index % 2 === 0 ? homeTab.push([he.decode(team.innerText.trim()), `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')]) : 
+    awayTab.push([he.decode(team.innerText.trim()), `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')])
+  })
+  root.querySelectorAll('.match-result').map(match => {
+    var day = match.parentNode.previousElementSibling.innerHTML
+    var info = match.querySelector('.Calendar-clubResult').innerText.trim()
+    currentDay === day ? infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info]) : 
+    infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info])
+    currentDay = day
+  })
+  matchDict["home"] = homeTab
+  matchDict["away"] = awayTab
+  matchDict["infos"] = infosTab
+  resp[root.querySelector('.Scorebar-journeyItem--active').innerText.trim().slice(1)] = matchDict
+  res.json(resp)
+})
 
 // Valorant Routes
 
@@ -162,6 +231,29 @@ app.get('/league/:tournamentId/matches', async (req, res) => {
   res.json(response.data);
 });
 
+app.get('/league/:leagueName/:season/details', async (req, res) => {
+  const [resp, pickTab, banTab] = [{}, [], []];
+  const matchNum = parseInt((req.query.day - 1) * 5) + parseInt(req.query.match);
+  const week = Math.ceil(req.query.day / 2);
+  const response = await axios.get(`https://lol.fandom.com/wiki/${req.params.leagueName}/2024_Season/${req.params.season}_Season/Scoreboards${week === 1 ? "" : `/Week_${week}`}`);
+  const root = parse(response.data);
+  const container = root.querySelectorAll('.inline-content')[(matchNum - 1) % 10];
+  container.querySelectorAll('.champion-sprite').map((champion, index) => {
+    var champion = champion.attributes.title;
+    index - 10 < 0 ? pickTab.push(champion) : banTab.push(champion);
+  })
+  resp["time"] = container.querySelector(`tr.sb-w${req.query.day % 2 != 0 ? 1 : 2}-g${matchNum % 10}`).childNodes[1].innerText;
+  resp["players"] = container.querySelectorAll('.sb-p-name').map(player => player.innerText);
+  resp["kda"] = container.querySelectorAll('.sb-p-stat-kda').map(kda => kda.innerText);
+  resp["gold"] = container.querySelectorAll('.sb-header-Gold').map(gold => gold.innerText.trim());
+  resp["towers"] = container.querySelectorAll('.sb-footer-item-towers').map(tower => tower.innerText.trim());
+  resp["dragons"] = container.querySelectorAll('.sb-footer-item-dragons').map(dragon => dragon.innerText.trim());
+  resp["barons"] = container.querySelectorAll('.sb-footer-item-barons').map(baron => baron.innerText.trim());
+  resp["pick"] = pickTab;
+  resp["ban"] = banTab;
+  res.json(resp);
+})
+
 app.get('/search/:query', async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/teams/${req.params.query}`
   const response = await axios.request(optionsPanda);
@@ -181,9 +273,9 @@ app.get('/pastMaches', async (req, res) => {
 });
 
 app.get('/league/:tournamentId/bracket', async (req, res) => {
-  optionsPanda['url'] = `https://api.pandascore.co/tournaments/12823/brackets`
+  optionsPanda['url'] = `https://api.pandascore.co/tournaments/${req.params.tournamentId}/brackets`
   const response = await axios.request(optionsPanda);
-  res.json({message: response.data});
+  res.json(response.data);
 });
 
 app.listen(3001, () => {

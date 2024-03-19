@@ -28,6 +28,9 @@ export default {
         'pseudo' : ["Industry Bold"]
       }
     },
+    blur: {
+      xs: '2px'
+    }
   },
   // eslint-disable-next-line no-undef
   plugins: [require("daisyui")],

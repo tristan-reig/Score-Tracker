@@ -11,8 +11,8 @@ const Bracket = (props) => {
     const fetchData = async () => {
       try {
         setCases([15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12])
-        var response = await axios.get(`http://localhost:3001/league/10992/bracket`)
-        setdataBracket(response.data.message);
+        var response = await axios.get(`http://localhost:3001/league/${props.bracketId}/bracket`)
+        setdataBracket(response.data);
       } catch (error) {
         console.log(error)
       }
@@ -25,21 +25,29 @@ const Bracket = (props) => {
   }
 
   for (let i=0; i<dataBracket.length*2; i++) {
-    var somme = 0
-    var idTeam = dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.id
-    for (let j=0; j<dataBracket[Math.floor(i / 2)].games.length; j++) {
-      if (idTeam == dataBracket[Math.floor(i / 2)].games[j].winner.id) {
-        somme += 1
+    try {
+      var somme = 0
+      let idTeam;
+      try {
+        idTeam = dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.id
+        for (let j=0; j<dataBracket[Math.floor(i / 2)].games.length; j++) {
+          if (idTeam == dataBracket[Math.floor(i / 2)].games[j].winner.id) {
+            somme += 1
+          }
+        }
+      } catch {
+        idTeam = 0
       }
+      res[i] = [dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.name, dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.image_url]
+    } catch {
+      res[i] = ["TBD", TBD]
     }
-    res[i] = [dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.name, dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.image_url, somme]
   }
 
   return (
       <div className="grid grid-cols-4">
         {Array.from({length : 32}).map((_, index) => (
           <div
-            title={index}
             key={index} 
             className={
               `${cases.includes(index) ? "border" : ""}
@@ -49,7 +57,7 @@ const Bracket = (props) => {
               ${[7, 13, 22, 23].includes(index) ? `${index === 23  ? "" : "border-t rounded-tr-2xl"} border-r w-[50%]` : ""}
               ${[11, 25, 27].includes(index) ? `${index === 11 ? "" : "border-b rounded-br-2xl"} border-r w-[50%]` : ""}
               ${index % 4 == 3 ? "w-80" : ""}
-              h-[62.5px] flex`} 
+              h-[62.5px] flex`}
           >
             {cases.includes(index) && (
               <span className="flex w-full m-2 items-center justify-between p-2 hover:bg-gray-700 cursor-pointer rounded-md">

@@ -18,7 +18,7 @@ const TeamCard = (props) => {
   return (
     props.name ?
       <Link to={props.id ? `/search?query=${props.id}` : ""} className="h-44 container border cursor-pointer flex flex-col justify-center items-center p-3 bg-gray-700 hover:bg-gray-800">
-        <img className={`${imageDimensions.height - imageDimensions.width < 50 ? 'w-24 mb-3' : 'w-20'}`} src={props.image}/>
+        <img className={`${imageDimensions.width >= imageDimensions.height ? 'w-24 mb-3' : 'w-20'}`} src={props.image}/>
         <span className="text-center">{props.name}</span>
       </Link> : 
       <div className="h-44 container border cursor-pointer flex flex-col justify-center items-center p-3 bg-gray-700 animate-pulse">

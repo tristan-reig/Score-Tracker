@@ -53,7 +53,7 @@ const Draft = () => {
             <span className={`absolute font-semibold bottom-0 ${index1 === 0 ? 'right-0' : 'left-0'} p-2`}></span>
             <img
               draggable='false'
-              className={`border w-full h-[18vh] object-cover ${index2 === 3 && 'mt-6'}`} 
+              className={`border w-full h-[18vh] object-cover`} 
               style={{ objectPosition: `50% ${5 + Math.floor(Math.random() * 10)}%` }}
               src={index1 === 0 ? 'https://img.freepik.com/photos-premium/texture-fond-tissu-armure-large-bleu_165545-2126.jpg' : "https://e1.pxfuel.com/desktop-wallpaper/559/22/desktop-wallpaper-deep-red-backgrounds-plain-red.jpg"}
               onDragOver={(event) => event.preventDefault()} 
@@ -64,7 +64,7 @@ const Draft = () => {
       </div>
       ))}
       <div className="flex flex-col justify-center items-center">
-        <div className="mt-4">
+        <div className="my-4">
           {Array.from({length : 166 / 15 }).map((_, index1) => (
             <div key={index1} className="flex flex-row">
               {Array.from({length : 15}).map((_, index2) => (
@@ -77,20 +77,6 @@ const Draft = () => {
                   key={index2} 
                   className='w-10 h-10 m-2 cursor-pointer hover:border'
                 />
-              ))}
-          </div>
-          ))}
-          {Array.from({length : 166 % 15}).map((_, index1) => (
-            <div key={index1} className="flex flex-row justify-center">
-              {Array.from({length : 166 % 15}).map((_, index2) => (
-                <img
-                  draggable='true'
-                  onDragStart={(event) => event.dataTransfer.setData('index', event.target.alt)}
-                  alt={165 - 15 * index1 + index2}
-                  title={data[165 - 15 * index1 + index2].name} 
-                  src={data[165 - 15 * index1 + index2].image_url} 
-                  key={index2} 
-                  className='w-10 h-10 m-2 cursor-pointer hover:border'/>
               ))}
           </div>
           ))}

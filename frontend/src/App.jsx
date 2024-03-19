@@ -7,7 +7,7 @@ import Planning from "./components/Planning";
 import Rugby from "./pages/Rugby";
 import League from "./pages/League";
 import Draft from "./pages/Draft";
-import Ligue1 from "./pages/Ligue1";
+import Football from "./pages/Football";
 import Valorant from "./pages/Valorant";
 
 export default function App() {
@@ -26,8 +26,8 @@ export default function App() {
         <Route path="/rugby/:league" element={<Layout />}>
           <Route index element={<Rugby />}/>
         </Route>
-        <Route path="/ligue1" element={<Layout />}>
-          <Route index element={<Ligue1 />}/>
+        <Route path="/football/ligue1" element={<Layout />}>
+          <Route index element={<Football />}/>
         </Route>
         <Route path="/league/:league" element={<Layout />}>
           <Route index element={<League />}/>
