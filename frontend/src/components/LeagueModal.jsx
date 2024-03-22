@@ -28,6 +28,8 @@ const Modal = React.forwardRef((props, ref) => {
       return "Renata"
     } else if (input === "Wukong") {
       return 'MonkeyKing'
+    } else if (input === "Bel'Veth") {
+      return 'Belveth'
     }
     else if (!input.includes(' ')) {
       formattedString = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();

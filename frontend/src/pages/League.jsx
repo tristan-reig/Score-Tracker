@@ -8,7 +8,7 @@ import { fr } from 'date-fns/locale'
 import SkeletonTeamCard from '../components/SkeletonTeamCard'
 import Bracket from '../components/Bracket'
 import Carousel from '../components/Carousel'
-import Modal from '../components/Modal'
+import LeagueModal from '../components/LeagueModal'
 
 const League = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
@@ -59,6 +59,8 @@ const League = () => {
       <SkeletonTeamCard length={10} column={4} />
     </div>
   }
+
+  console.log(dataMatches[0])
 
   return (
     <div className="pt-1 bg-gray-900">
@@ -118,7 +120,9 @@ const League = () => {
                     Jour {week + 1} - {dataMatches[week * 5 + index].league.name} - BO{dataMatches[week * 5 + index].number_of_games}
                   </div>
                   {dataMatches[week * 5 + index].status === "finished" && <div className="absolute inset-y-14 left-0">
-                    <button className="rounded-lg bg-cyan-400 hover:bg-cyan-500 text-black px-5 py-1.5" onClick={() => openModal(index+1)}>VOD</button>
+                    <Link target='_blank' to={dataMatches[week * 5 + index].streams_list[0].raw_url} className="rounded-lg bg-cyan-400 hover:bg-cyan-500 text-black px-5 py-1.5">
+                      VOD
+                    </Link>
                   </div>}
                   <div className="absolute top-0 right-0 pr-2 pt-1">
                     {dataMatches[week * 5 + index].status === "not_started" && "Prochainement"}
@@ -160,7 +164,7 @@ const League = () => {
               </div>
             ))}
             {dataMatches[week * 5].status === "finished" &&
-              <Modal 
+              <LeagueModal 
                 ref={modalRef} 
                 compName={route.pathname.split('/')[2] === "Superliga" ? tournament.league.name.split(' ').join('_') : "LVP_SuperLiga"} 
                 day={week + 1} 

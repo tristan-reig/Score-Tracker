@@ -26,7 +26,7 @@ export default function App() {
         <Route path="/rugby/:league" element={<Layout />}>
           <Route index element={<Rugby />}/>
         </Route>
-        <Route path="/football/ligue1" element={<Layout />}>
+        <Route path="/football/:league" element={<Layout />}>
           <Route index element={<Football />}/>
         </Route>
         <Route path="/league/:league" element={<Layout />}>

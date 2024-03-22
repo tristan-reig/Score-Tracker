@@ -38,7 +38,7 @@ const Bracket = (props) => {
       } catch {
         idTeam = 0
       }
-      res[i] = [dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.name, dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.image_url]
+      res[i] = [dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.name, dataBracket[Math.floor(i / 2)].opponents[i%2].opponent.image_url, somme]
     } catch {
       res[i] = ["TBD", TBD]
     }

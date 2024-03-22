@@ -34,10 +34,10 @@ const Ligue1 = () => {
 
   console.log(dataMatches)
 
-  if (!dataTeams ||!dataStandings || !dataMatches) {
+  if (!dataTeams) {
     return <div className="mt-5">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
-      <SkeletonTeamCard length={18} column={6} />
+      <SkeletonTeamCard length={20} column={5} />
     </div>
   }
   
@@ -46,13 +46,14 @@ const Ligue1 = () => {
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={false} />
       <div className="w-full border-t relative">
         {currentTab === "Teams" && (
-          <div className="grid grid-cols-6 gap-4 p-5">
+          <div className={`grid grid-cols-5 gap-4 p-5`}>
             {Object.keys(dataTeams).map((team, index) => (
-              <TeamCard 
+              <TeamCard
                 key={index}
                 name={team.replace(/\b\d+\b|\b(?:Fc|Sc|Rc)\b/g, '').trim()}
-                index={index} 
-                image={dataTeams[team]} 
+                index={index}
+                image={dataTeams[team][0]}
+                color={dataTeams[team][1]}
               />
             ))}
           </div>

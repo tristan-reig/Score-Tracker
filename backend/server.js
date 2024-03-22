@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import { parse } from 'node-html-parser';
+import { JSDOM } from 'jsdom';
 import he from 'he';
 
 const app = express();
@@ -123,6 +124,15 @@ app.get('/rugby/:leagueName/matches', async(req, res) => {
   res.json(resp)
 })
 
+app.get('/rugby/:leagueName/details', async(req, res) => {
+  const [resp, playerTab] = [{}, []];
+  const response = await axios.get('https://top14.lnr.fr/feuille-de-match/2023-2024/j18/10374-perpignan-toulouse/compositions')
+  const root = parse(response.data);
+  root.querySelectorAll('.player-pitch__name').map(player => playerTab.push(player.innerText))
+  resp["players"] = playerTab
+  res.json(resp);
+})
+
 // Football Routes
 
 app.get('/football/ligue1/teams', async (req, res) => {
@@ -137,9 +147,9 @@ app.get('/football/ligue1/teams', async (req, res) => {
     const formattedName = name.toLowerCase().replace(/(^|\s)\S/g, (match) => match.toUpperCase());
     const logoSrc = clubLogos[index].childNodes[1].attributes['data-src'];
     const logoUrl = logoSrc ? "https://ligue1.fr" + logoSrc : null;
-    resp[formattedName] = logoUrl;
+    const color = root.querySelectorAll('.ClubListPage-card')[index].attributes.style.split(':')[1]
+    resp[formattedName] = [logoUrl, color];
   });
-
   res.json(resp);
 });
 
@@ -180,6 +190,16 @@ app.get('/football/ligue1/matches', async (req, res) => {
   matchDict["infos"] = infosTab
   resp[root.querySelector('.Scorebar-journeyItem--active').innerText.trim().slice(1)] = matchDict
   res.json(resp)
+})
+
+app.get('/football/premier-league/teams', async (req, res) => {
+  const resp = {};
+  const response = await axios.get("https://www.premierleague.com/clubs");
+  const root = parse(response.data);
+  root.querySelectorAll(".club-card-wrapper").map(container => {
+    resp[container.querySelector('.club-card__name').innerText] = container.querySelector('.club-card__badge').childNodes[1].childNodes[1].attributes.src;
+  })
+  res.json(resp);
 })
 
 // Valorant Routes
