@@ -1,11 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import Select from "../components/Select"
-import TeamCard from "../components/TeamCard";
-import SkeletonTeamCard from "../components/SkeletonTeamCard";
-import StandingsContainer from "../components/StandingsContainer";
 import { useLocation } from "react-router-dom";
-import Pagination from "../components/Pagination";
+import {Pagination, TeamCard, SkeletonTeamCard, Select, StandingsContainer} from "../components";
 
 const Ligue1 = () => {
   const [currentTab, setCurrentTab] = useState("Teams")
@@ -42,9 +38,9 @@ const Ligue1 = () => {
   }
   
   return (
-    <div className="mt-5">
+    <div className="pt-1 bg-gray-900">
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={false} />
-      <div className="w-full border-t relative">
+      <div className="w-full border-t relative bg-base-100">
         {currentTab === "Teams" && (
           <div className={`grid grid-cols-5 gap-4 p-5`}>
             {Object.keys(dataTeams).map((team, index) => (
@@ -52,14 +48,13 @@ const Ligue1 = () => {
                 key={index}
                 name={team.replace(/\b\d+\b|\b(?:Fc|Sc|Rc)\b/g, '').trim()}
                 index={index}
-                image={dataTeams[team][0]}
-                color={dataTeams[team][1]}
+                image={dataTeams[team]}
               />
             ))}
           </div>
         )}
         {currentTab === "Standings" && (
-          <div className="flex flex-col overflow-x-hidden p-5">
+          <div className="flex flex-col overflow-x-hidden">
             <StandingsContainer>
             <tbody>
               {Object.keys(dataStandings).map((team, index) => (

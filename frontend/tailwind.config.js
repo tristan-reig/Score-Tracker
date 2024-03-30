@@ -26,12 +26,20 @@ export default {
       fontFamily: {
         'title' : ["Gobold Thin"],
         'pseudo' : ["Industry Bold"]
-      }
+      },
     },
     blur: {
       xs: '2px'
-    }
+    },
+    zIndex: {
+      '1' : '1',
+      '2' : '2',
+      '5' : '5',
+    },
   },
   // eslint-disable-next-line no-undef
-  plugins: [require("daisyui")],
+  plugins: [
+    require("daisyui"),
+    require('tailwindcss-animated'),
+  ],
 }

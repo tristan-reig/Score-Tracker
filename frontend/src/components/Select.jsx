@@ -1,7 +1,7 @@
 const Select = (props) => {
 
   return (
-    <div className="flex flex-row items-center text-center justify-around gap-4">
+    <div className="flex flex-row items-center text-center justify-around gap-4 bg-gray-900">
       <div 
         className={`element border w-full p-5 text-xl border-b-0 ${props.disabled ? 'cursor-not-allowed' : 'cursor-pointer'} hover:bg-black ${props.currentTab === "Teams" ? "bg-black" : "bg-base-100"}`} 
         onClick={() => props.disabled == false && props.setCurrentTab("Teams")}

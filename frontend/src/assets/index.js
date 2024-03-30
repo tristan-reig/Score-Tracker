@@ -1,3 +1,5 @@
+export { default as BgLogin } from './bg-login.webp';
+
 export { default as Lec } from './lec-2019.avif';
 export { default as Lck } from './LCK.svg';
 export { default as Lfl } from './lfl.svg';

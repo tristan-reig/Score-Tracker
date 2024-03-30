@@ -1,14 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/Layout";
-import Home from "./pages/Home";
-import Test from "./pages/Test";
-import Search from "./pages/Search";
-import Planning from "./components/Planning";
-import Rugby from "./pages/Rugby";
-import League from "./pages/League";
-import Draft from "./pages/Draft";
-import Football from "./pages/Football";
-import Valorant from "./pages/Valorant";
+import {Layout, Home, Test, Search, Rugby, League, Football, Valorant, Login} from "./pages";
 
 export default function App() {
   return (
@@ -19,9 +10,6 @@ export default function App() {
         </Route>
         <Route path="/search" element={<Layout />}>
           <Route index element={<Search />}/>
-        </Route>
-        <Route path="/planning" element={<Layout />}>
-          <Route index element={<Planning />}/>
         </Route>
         <Route path="/rugby/:league" element={<Layout />}>
           <Route index element={<Rugby />}/>
@@ -35,8 +23,8 @@ export default function App() {
         <Route path="/valorant/:league" element={<Layout />}>
           <Route index element={<Valorant />}/>
         </Route>
-        <Route path="/draft" element={<Layout />}>
-          <Route index element={<Draft />}/>
+        <Route path="/login" element={<Layout />}>
+          <Route index element={<Login />}/>
         </Route>
         <Route path="/test" element={<Test />} />
       </Routes>

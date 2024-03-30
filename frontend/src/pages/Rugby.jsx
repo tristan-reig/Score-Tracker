@@ -1,19 +1,22 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import TeamCard from "../components/TeamCard";
 import Select from "../components/Select"
 import SkeletonTeamCard from "../components/SkeletonTeamCard";
 import Pagination from "../components/Pagination";
 import StandingsContainer from "../components/StandingsContainer";
 import { useLocation } from "react-router-dom";
+import RugbyModal from "../components/RugbyModal";
 
 const Rugby = () => {
-  const [currentTab, setCurrentTab] = useState("Teams")
+  const [currentTab, setCurrentTab] = useState("Teams");
   const [dataTeams, setDataTeams] = useState(null);
-  const [dataStandings, setDataStandings] = useState(null)
-  const [dataMatches, setDataMatches] = useState(null)
-  const [week, setWeek] = useState(0)
-  var route = useLocation()
+  const [dataStandings, setDataStandings] = useState(null);
+  const [dataMatches, setDataMatches] = useState(null);
+  const [week, setWeek] = useState(0);
+  const [modalButtonId, setModalButtonId] = useState(0);
+  const modalRef = useRef(null);
+  var route = useLocation();
   
   useEffect(() => {
     const fetchData = async () => {
@@ -33,14 +36,19 @@ const Rugby = () => {
   },[route, setWeek]);
 
   if (!dataTeams || !dataStandings || !dataMatches) {
-    return <div className="mt-5">
+    return <div>
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={true} />
       <SkeletonTeamCard length={14} column={5} />
     </div>
   }
   
+  const openModal = (buttonId) => {
+    setModalButtonId(buttonId);
+    modalRef.current.showModal();
+  };
+
   return (
-    <div className="mt-5">
+    <div>
       <Select currentTab={currentTab} setCurrentTab={setCurrentTab} disabled={false} />
       <div className="w-full border-t relative">
         {currentTab === "Teams" && (
@@ -127,7 +135,8 @@ const Rugby = () => {
           </div>
         )}
         {currentTab === "Matches" && (
-          Array.from({length : Object.keys(dataMatches[week]["home"]).length}).map((_, index) => (
+          <div>
+            {Array.from({length : Object.keys(dataMatches[week]["home"]).length}).map((_, index) => (
             <div key={index}>
               <div className="container mx-auto flex flex-row justify-center items-center relative p-2 border-b">
                 <div className="absolute bottom-50 left-0 pr-2 pb-1">
@@ -136,7 +145,7 @@ const Rugby = () => {
                   <div>{dataMatches[week]["infos"][index][1].includes('h') && dataMatches[week]["infos"][index][1]}</div>
                 </div>
                 <div className="absolute bottom-50 right-0 pr-2 pb-1">
-                  <button className="btn bg-amber-600 hover:bg-amber-500 text-black">Détails</button>
+                  {dataMatches[week]["infos"][index][2] && <button className="btn bg-amber-600 hover:bg-amber-500 text-black" onClick={() => openModal(index)}>Détails</button>}
                 </div>
                 <div className="home flex flex-row items-center px-6">
                   <div className="items-center flex flex-col">
@@ -158,7 +167,11 @@ const Rugby = () => {
                 <Pagination length={(Object.keys(dataTeams).length - 1) * 2} setWeek={setWeek} week={week} setDataMatches={setDataMatches} />)
               }
             </div>
-          ))
+            ))}
+            {dataMatches[week]["infos"][modalButtonId][2] && (
+              <RugbyModal ref={modalRef} matchIndex={modalButtonId} id={dataMatches[week]["infos"][modalButtonId][2]} week={week} />
+            )}
+          </div>
         )}
       </div>
     </div>

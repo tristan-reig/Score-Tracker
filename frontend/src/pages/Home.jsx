@@ -1,10 +1,10 @@
-import Hero from '../components/Hero'
+import { Hero } from '../components'
 import { homeData } from '../data/Home'
 import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <>
+    <div>
       <Hero/>
       <div className="grid xl:grid-cols-4 p-5 gap-10 md:grid-cols-3">
         {homeData.map((data, index) => (
@@ -18,6 +18,6 @@ export default function Home() {
           </Link>
         ))}
       </div>
-    </>
+    </div>
   )
 }

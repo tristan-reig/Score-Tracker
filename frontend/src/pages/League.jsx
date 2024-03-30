@@ -54,13 +54,13 @@ const League = () => {
   };
 
   if (!dataTeams || !dataStandings || !dataMatches) {
-    return <div className="mt-5">
-      <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={false} disabled={true} />
-      <SkeletonTeamCard length={10} column={4} />
-    </div>
+    return (
+      <div className="mt-5">
+        <Select currentTab={currentTab} setCurrentTab={setCurrentTab} live={false} disabled={true} />
+        <SkeletonTeamCard length={10} column={4} />
+      </div>
+    )
   }
-
-  console.log(dataMatches[0])
 
   return (
     <div className="pt-1 bg-gray-900">
@@ -120,7 +120,7 @@ const League = () => {
                     Jour {week + 1} - {dataMatches[week * 5 + index].league.name} - BO{dataMatches[week * 5 + index].number_of_games}
                   </div>
                   {dataMatches[week * 5 + index].status === "finished" && <div className="absolute inset-y-14 left-0">
-                    <Link target='_blank' to={dataMatches[week * 5 + index].streams_list[0].raw_url} className="rounded-lg bg-cyan-400 hover:bg-cyan-500 text-black px-5 py-1.5">
+                    <Link target='_blank' className="rounded-lg bg-cyan-400 hover:bg-cyan-500 text-black px-5 py-1.5">
                       VOD
                     </Link>
                   </div>}
@@ -164,11 +164,11 @@ const League = () => {
               </div>
             ))}
             {dataMatches[week * 5].status === "finished" &&
-              <LeagueModal 
-                ref={modalRef} 
-                compName={route.pathname.split('/')[2] === "Superliga" ? tournament.league.name.split(' ').join('_') : "LVP_SuperLiga"} 
-                day={week + 1} 
-                matchIndex={modalButtonId} 
+              <LeagueModal
+                ref={modalRef}
+                compName={tournament.league.name.split(' ').join('_') == "LVP_SL" ? "LVP_SuperLiga" : tournament.league.name.split(' ').join('_')}
+                day={week + 1}
+                matchIndex={modalButtonId}
                 data={dataMatches[5 * week + modalButtonId - 1]}
                 season={tournament.serie.season}
               />

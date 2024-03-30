@@ -2,11 +2,14 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import { parse } from 'node-html-parser';
-import { JSDOM } from 'jsdom';
 import he from 'he';
+import UserModel from "./model.js"
+import mongoose from "mongoose"
 
 const app = express();
 app.use(cors());
+app.use(express.json());
+mongoose.connect("mongodb://127.0.0.1:27017/ScoreTracker");
 
 const optionsPanda = {
   method: 'GET',
@@ -15,6 +18,30 @@ const optionsPanda = {
     authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes',
   },
 };
+
+// User Routes
+
+app.post("/login", (req, res) => {
+  const {email, password} = req.body;
+  UserModel.findOne({email : email})
+  .then(user => {
+    if(user) {
+      if(user.password === password){
+        res.json("Success")
+      }else{
+        res.json("The password is incorrect")
+      }
+    }else{
+      res.json("No record existed")
+    }
+  })
+})
+
+app.post("/register", (req, res) => {
+  UserModel.create(req.body)
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+})
 
 // Rugby Routes
 
@@ -101,20 +128,20 @@ app.get('/rugby/:leagueName/matches', async(req, res) => {
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/calendrier-et-resultats/${req.query.week ? `2023-2024/j${req.query.week}` : ``}`)
   const root = parse(response.data)
   var currentDay = root.querySelector(".calendar-results__fixture-date").innerHTML.trim()
-  root.querySelectorAll(".club-line").map(async (club, index) => {
+  root.querySelectorAll(".club-line").map((club, index) => {
     index % 2 === 0 ?
-    homeTab.push([club.childNodes[3].childNodes[0].innerText.trim(), club.childNodes[1].childNodes[1]._attrs.src]) :
-    awayTab.push([club.childNodes[3].childNodes[0].innerText.trim(), club.childNodes[1].childNodes[1]._attrs.src])
+    homeTab.push([club.querySelector('.club-line__name').innerHTML.trim(), club.childNodes[1].childNodes[1]._attrs.src]) :
+    awayTab.push([club.querySelector('.club-line__name').innerHTML.trim(), club.childNodes[1].childNodes[1]._attrs.src])
   })
-  root.querySelectorAll(".calendar-results__line").map(async (match, index) => {
+  root.querySelectorAll(".calendar-results__line").map((match, index) => {
     var matchDay = match.previousElementSibling.childNodes[0].rawText.trim()
     if (matchDay.includes("vendredi") || matchDay.includes("samedi") || matchDay.includes("dimanche")) {
       currentDay = matchDay
     }
     try {
-      infosTab.push([currentDay, root.querySelectorAll('.match-line__score')[index].innerHTML.trim()])
+      infosTab.push([currentDay, match.querySelector('.match-line__score').innerHTML.trim(), match.querySelector('.match-links__link').attributes.href.split('/')[6]])
     } catch {
-      infosTab.push([currentDay, root.querySelectorAll('.match-line__time')[index - root.querySelectorAll('.match-line__score').length].innerHTML.trim()])
+      infosTab.push([currentDay, match.querySelector('.match-line__time').innerHTML.trim()])
     }
   })
   matchDict["home"] = homeTab
@@ -125,11 +152,13 @@ app.get('/rugby/:leagueName/matches', async(req, res) => {
 })
 
 app.get('/rugby/:leagueName/details', async(req, res) => {
-  const [resp, playerTab] = [{}, []];
-  const response = await axios.get('https://top14.lnr.fr/feuille-de-match/2023-2024/j18/10374-perpignan-toulouse/compositions')
+  const [resp , playerTab] = [{}, []];
+  const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/feuille-de-match/2023-2024/j${req.query.week}/${req.query.id}/compositions`)
   const root = parse(response.data);
-  root.querySelectorAll('.player-pitch__name').map(player => playerTab.push(player.innerText))
+  root.querySelectorAll('.player-pitch__name').map(player => playerTab.push(he.decode(player.childNodes[0].innerText + ' ' + player.childNodes[1].innerText)))
   resp["players"] = playerTab
+  resp["home"] = [req.query.id.split('-')[1], root.querySelectorAll('.player-pitch__jersey')[0].attributes.src]
+  resp["away"] = [req.query.id.split('-')[2], root.querySelectorAll('.player-pitch__jersey')[15].attributes.src]
   res.json(resp);
 })
 
@@ -255,6 +284,7 @@ app.get('/league/:leagueName/:season/details', async (req, res) => {
   const [resp, pickTab, banTab] = [{}, [], []];
   const matchNum = parseInt((req.query.day - 1) * 5) + parseInt(req.query.match);
   const week = Math.ceil(req.query.day / 2);
+  console.log((matchNum - 1) % 10)
   const response = await axios.get(`https://lol.fandom.com/wiki/${req.params.leagueName}/2024_Season/${req.params.season}_Season/Scoreboards${week === 1 ? "" : `/Week_${week}`}`);
   const root = parse(response.data);
   const container = root.querySelectorAll('.inline-content')[(matchNum - 1) % 10];
@@ -262,7 +292,7 @@ app.get('/league/:leagueName/:season/details', async (req, res) => {
     var champion = champion.attributes.title;
     index - 10 < 0 ? pickTab.push(champion) : banTab.push(champion);
   })
-  resp["time"] = container.querySelector(`tr.sb-w${req.query.day % 2 != 0 ? 1 : 2}-g${matchNum % 10}`).childNodes[1].innerText;
+  resp["time"] = container.querySelector(`tr.sb-w${req.query.day % 2 != 0 ? 1 : 2}-g${matchNum % 10 == 0 ? 10 : matchNum % 10}`).childNodes[1].innerText;
   resp["players"] = container.querySelectorAll('.sb-p-name').map(player => player.innerText);
   resp["kda"] = container.querySelectorAll('.sb-p-stat-kda').map(kda => kda.innerText);
   resp["gold"] = container.querySelectorAll('.sb-header-Gold').map(gold => gold.innerText.trim());

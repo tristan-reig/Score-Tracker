@@ -73,7 +73,7 @@ const Modal = React.forwardRef((props, ref) => {
                     className={`${isHovered && 'grayscale blur-xs'} absolute`}
                   />
                   {isHovered && (
-                    <span className='z-10 flex m-auto text-lg text-blue-400 font-semibold bg-black'>{data["kda"][index]}</span>
+                    <span className='z-5 flex m-auto text-lg text-blue-400 font-semibold bg-black'>{data["kda"][index]}</span>
                   )}
                 </div>
                 <span>{data["players"][index]}</span>
@@ -138,7 +138,7 @@ const Modal = React.forwardRef((props, ref) => {
                     className={`${isHovered && 'grayscale blur-xs'} absolute`}
                   />
                   {isHovered && (
-                    <span className='z-10 flex m-auto text-lg text-red-400 font-semibold bg-black'>{data["kda"][index + 5]}</span>
+                    <span className='z-5 flex m-auto text-lg text-red-400 font-semibold bg-black'>{data["kda"][index + 5]}</span>
                   )}
                 </div>
                 <span>{data["players"][index + 5]}</span>

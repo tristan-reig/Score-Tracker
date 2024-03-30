@@ -16,16 +16,11 @@ const TeamCard = (props) => {
     };
   }, [props])
 
-  console.log(props.color)
-
   return (
     props.name ?
       <Link
-        onMouseOver={() => setIsHovered(true)}
-        style={{backgroundColor: isHovered ? props.color : "#374151"}}
         to={props.id ? `/search?query=${props.id}` : ""}
-        onMouseOut={() => setIsHovered(false)}
-        className={`bg-left bg-[url('/src/assets/Transparent_Foot.png')] bg-cover bg-left h-44 container border cursor-pointer flex flex-col justify-center items-center p-3`}
+        className={`h-44 container border cursor-pointer flex flex-col justify-center items-center p-3 bg-gray-700 hover:bg-gray-800`}
       >
         <img className={`${imageDimensions.width >= imageDimensions.height ? 'w-24 mb-3' : 'w-20'}`} src={props.image}/>
         <span className="text-center">{props.name}</span>
