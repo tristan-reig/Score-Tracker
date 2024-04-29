@@ -105,7 +105,7 @@ const League = () => {
               </table>
             </div>
             {bracketId && (
-              <div>
+              <div className='h-full'>
                 <Bracket length={6} bracketId={bracketId}/>
               </div>
             )}

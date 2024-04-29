@@ -41,6 +41,8 @@ const Team = (props) => {
     }
   }
 
+  console.log(props.data.players)
+
   return (
     <div className="bg-gray-400 p-5">
       <div className='container-fluid'>
@@ -58,25 +60,11 @@ const Team = (props) => {
         </div>
       </div>
       <h2 className="title text-xl text-gray-700 font-mono mt-10">Roster</h2>
-      {props.data.players.length <= 6 ? 
         <div className="main-roster flex flex-row items-center justify-center">
         {props.data.players.map((_, index) => (
             <Roster key={index} index={index} items={props.data.players.length} players={props.data.players} position_array={["top", "jun", "mid", "adc", "sup"]} />
         ))}
-      </div> : 
-        <>
-          <div className="main-roster flex flex-row items-center justify-center">
-          {firstPart.map((_, index) => (
-              <Roster key={index} items={props.data.players.length} index={index} players={firstPart} />
-          ))}
-          </div>
-          <div className="main-roster flex flex-row items-center justify-center">
-          {secondPart.map((_, index) => (
-              <Roster key={index} items={props.data.players.length} index={index} players={secondPart} />
-          ))}
-          </div>
-        </>
-      }
+      </div>
       <div className="matches flex flex-col mt-10 container-sm">
         <h2 className="title text-xl text-gray-700 font-mono">Derniers matchs</h2>
         <div className="p-5">

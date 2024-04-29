@@ -7,7 +7,7 @@ const Test = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3001/rugby/top14/matches?week=19');
+      const response = await axios.get('http://localhost:3001/valorant/7385/teams');
       setData(response.data);
     }
     fetchData();
@@ -22,9 +22,7 @@ const Test = () => {
   console.log(data)
 
   return (
-    <div className="bg-green-700 m-5 mx-20">
-      {/* <RugbyField player1={data.slice(0, 15)} team1={"Perpignan"} player2={data.slice(15, 30)} team2={"Toulouse"} /> */}
-    </div>
+    <div>Fini</div>
   );
 };
 

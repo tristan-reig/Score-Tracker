@@ -235,29 +235,9 @@ app.get('/football/premier-league/teams', async (req, res) => {
 
 app.get('/valorant/:leagueId/teams', async (req, res) => {
   const teamTab = []
-  optionsPanda['url'] = `https://api.pandascore.co/series/${req.params.leagueId}`
+  optionsPanda['url'] = `https://api.pandascore.co/series/${req.params.leagueId}/tournaments`
   const response = await axios.request(optionsPanda);
-  for (let i = 0; i < 3 ; i++) {
-    optionsPanda['url'] = `https://api.pandascore.co/tournaments/${response.data.tournaments[i].id}/teams`
-    const res = await axios.request(optionsPanda)
-    res.data.map(team => teamTab.push(team))
-  }
-  res.json(teamTab)
-});
-
-app.get('/valorant/:leagueId/groups', async (req, res) => {
-  const resp = {};
-  const letters = ['A', 'B', 'C'];
-  optionsPanda['url'] = `https://api.pandascore.co/series/${req.params.leagueId}`
-  const response = await axios.request(optionsPanda);
-  for (const letter of letters) {
-    const tournamentId = response.data.tournaments.find(tournament => tournament.name.includes(letter)).id;
-    optionsPanda['url'] = `https://api.pandascore.co/tournaments/${tournamentId}/standings`
-    const standingsResponse = await axios.request(optionsPanda);
-    const teams = standingsResponse.data.map(team => team);
-    resp["Groupe " + letter] = teams;
-  }
-  res.json(resp);
+  res.json(response.data)
 });
 
 // League Routes
@@ -284,7 +264,6 @@ app.get('/league/:leagueName/:season/details', async (req, res) => {
   const [resp, pickTab, banTab] = [{}, [], []];
   const matchNum = parseInt((req.query.day - 1) * 5) + parseInt(req.query.match);
   const week = Math.ceil(req.query.day / 2);
-  console.log((matchNum - 1) % 10)
   const response = await axios.get(`https://lol.fandom.com/wiki/${req.params.leagueName}/2024_Season/${req.params.season}_Season/Scoreboards${week === 1 ? "" : `/Week_${week}`}`);
   const root = parse(response.data);
   const container = root.querySelectorAll('.inline-content')[(matchNum - 1) % 10];

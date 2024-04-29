@@ -16,7 +16,7 @@ const Carousel = ({ children }) => {
     <div className="overflow-x-hidden relative">
       <div className="flex transition-transform duration-300 transform -translate-x-full" style={{ width: `${totalSlides * 100}%`, transform: `translateX(-${currentIndex * (100 / totalSlides)}%)` }}>
         {React.Children.map((children), (child) => (
-          <div className={`w-full ${currentIndex === 1 && "m-5"}`}>{child}</div>
+          <div className={`w-full ${currentIndex === 1 ? "m-5" : ""}`}>{child}</div>
         ))}
       </div>
       {currentIndex === 1 && <button className="absolute top-1/2 left-3 flex btn btn-circle" onClick={goToPreviousSlide}>{'<'}</button>}

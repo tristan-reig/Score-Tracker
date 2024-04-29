@@ -169,7 +169,7 @@ const Rugby = () => {
             </div>
             ))}
             {dataMatches[week]["infos"][modalButtonId][2] && (
-              <RugbyModal ref={modalRef} matchIndex={modalButtonId} id={dataMatches[week]["infos"][modalButtonId][2]} week={week} />
+              <RugbyModal teams={dataMatches[week]} ref={modalRef} matchIndex={modalButtonId} id={dataMatches[week]["infos"][modalButtonId][2]} week={week} />
             )}
           </div>
         )}

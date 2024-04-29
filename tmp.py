@@ -1,6 +1,6 @@
 import requests
 
-url = "https://api.pandascore.co/lol/champions?sort=armor&search[name]=A&page=1&per_page=50"
+url = "https://api.pandascore.co/series/7385/tournaments"
 
 headers = {
     "accept": "application/json",
@@ -11,4 +11,4 @@ response = requests.get(url, headers=headers)
 
 data = response.json()
 
-print(data)
+print(data[1])

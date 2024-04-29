@@ -49,7 +49,7 @@ const Bracket = (props) => {
   }
 
   return (
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 h-full">
         {Array.from({length : 32}).map((_, index) => (
           <div
             key={index}
@@ -61,12 +61,12 @@ const Bracket = (props) => {
               ${[7, 13, 22, 23].includes(index) ? `${index === 23  ? "" : "border-t rounded-tr-2xl"} border-r w-[50%]` : ""}
               ${[11, 25, 27].includes(index) ? `${index === 11 ? "" : "border-b rounded-br-2xl"} border-r w-[50%]` : ""}
               ${index % 4 == 3 ? "w-80" : ""}
-              h-[62.5px] flex`}
+              h-[62.5px] flex h-full`}
           >
             {cases.includes(index) && (
-              <span className={`flex w-full justify-between p-3 hover:bg-gray-700 cursor-pointer ${cases.findIndex((element) => element === index) % 2 == 0 ? "rounded-t-2xl" : "rounded-b-2xl"}`}>
+              <span className={`flex w-full justify-between p-3 hover:bg-gray-700 cursor-pointer items-center ${cases.findIndex((element) => element === index) % 2 == 0 ? "rounded-t-2xl" : "rounded-b-2xl"}`}>
                 <div className="flex flex-row items-center gap-3">
-                  <span>{res ? res[cases.findIndex((element) => element === index)][0] : "TBD"}</span>
+                  <span className="text-lg">{res ? res[cases.findIndex((element) => element === index)][0] : "TBD"}</span>
                   <img className="w-lg h-10" src={res ? res[cases.findIndex((element) => element === index)][1] : TBD} alt="" />
                 </div>
                 <span className="text-xl">{res[cases.findIndex((element) => element === index)][3] !== "not_started" ? res[cases.findIndex((element) => element === index)][2] : null}</span>

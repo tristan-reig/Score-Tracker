@@ -56,4 +56,9 @@ export const homeData = [{
   'img' : PremierLeague,
   'link' : '/football/premier-league',
   'colors' : ['gray-100'],
-},]
+},
+{
+  'img' : Vct,
+  'link' : '/valorant/vct-emea?id=7385',
+  'colors' : ['lime-300'],
+}]

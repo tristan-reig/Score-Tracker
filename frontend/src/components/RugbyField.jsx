@@ -12,7 +12,7 @@ const RugbyField = (props) => {
   }
   
   return (
-    <div className="flex w-full h-[400px] border" onMouseLeave={() => closeHover()}>
+    <div className="flex w-full h-[420px] border bg-green-800 rounded-b-xl" onMouseLeave={() => closeHover()}>
       <div className="w-[10%] flex">
         <span className="flex my-auto ml-auto -rotate-90 text-5xl text-white">H</span>
       </div>
