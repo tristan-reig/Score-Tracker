@@ -1,5 +1,5 @@
-export { default as BgLogin } from './bg-login.webp';
-
+export { default as LoL } from './lol-logo.png'
+export { default as BgLoL } from './Bg-LoL.jpg'
 export { default as Lec } from './lec-2019.avif';
 export { default as Lck } from './LCK.svg';
 export { default as Lfl } from './lfl.svg';
@@ -9,6 +9,7 @@ export { default as TCL } from './TCL.png';
 export { default as Nashor } from './Nashor.png';
 export { default as Champ } from './Champion.webp';
 
+
 export { default as ChampionsCup } from './Champions_Cup.png';
 export { default as ChallengeCup } from './Challenge_Cup.png';
 export { default as Top } from './Top_14.png';
@@ -16,5 +17,3 @@ export { default as ProD2 } from './ProD2.png';
 
 export { default as Ligue1 } from './Ligue1.png';
 export { default as PremierLeague } from './PremierLeague.png';
-
-export { default as Vct } from './vct_emea.png';

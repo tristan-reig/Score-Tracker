@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {Layout, Home, Test, Search, Rugby, League, Football, Valorant, Login} from "./pages";
+import {Layout, Home, Test, Search, Rugby, League, Football} from "./pages";
+import { useState } from "react";
 
 export default function App() {
+  const [category, setCategory] = useState('league');
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+        <Route path="/" element={<Layout setCategory={setCategory} homePage={true} />}>
+          <Route index element={<Home category={category} />} />
         </Route>
         <Route path="/search" element={<Layout />}>
           <Route index element={<Search />}/>
@@ -19,12 +22,6 @@ export default function App() {
         </Route>
         <Route path="/league/:league" element={<Layout />}>
           <Route index element={<League />}/>
-        </Route>
-        <Route path="/valorant/:league" element={<Layout />}>
-          <Route index element={<Valorant />}/>
-        </Route>
-        <Route path="/login" element={<Layout />}>
-          <Route index element={<Login />}/>
         </Route>
         <Route path="/test" element={<Test />} />
       </Routes>

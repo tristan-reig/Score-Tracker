@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { LoL } from '../assets'
 import logo from '../assets/logo.png'
-import { Link } from 'react-router-dom'
+import { IoIosFootball } from "react-icons/io";
+import { CiFootball } from "react-icons/ci";
+import { FaBell } from "react-icons/fa";
+import { useState } from 'react';
 
-const Navbar = () => {
-  const isLogged = localStorage.getItem('logged') || false
-
+const Navbar = (props) => {
   return (
     <div className="navbar bg-gray-900">
       <div className="navbar-start">
@@ -13,28 +14,22 @@ const Navbar = () => {
           <img src={logo} alt=""/>
         </a>
       </div>
-      <div className="navbar-center">
-        <div className="join py-2 relative">
-          {isLogged && (
-            <>
-              <button className="btn join-item text-xl pb-1 rounded-r-full">+</button>
-              <input className="input w-full join-item w-24 text-red-500 pointer-events-none text-white text-center" readOnly="readonly" placeholder={0}/>
-              <button className="btn join-item rounded-l-full">
-                <img className='w-6 h-6' src="https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/60815/golden-dollar-coin-clipart-md.png" alt="" />
-              </button>
-            </>
-          )}
-        </div>
+      <div className="navbar-center gap-4">
+        <button className='btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer' onClick={() => props.setCategory("league")}>
+          <img className='w-8' src={LoL} alt=""/>
+          <p>League of Legends</p>
+        </button>
+        <button className='btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer' onClick={() => props.setCategory("football")}>
+          <IoIosFootball size={30} />
+          <p>Football</p>
+        </button>
+        <button className='btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer' onClick={() => props.setCategory("rugby")}>
+          <CiFootball size={30} color='brown' />
+          <p>Rugby</p>
+        </button>
       </div>
       <div className="navbar-end">
-        {!isLogged ? 
-          <Link to={"/login"}>
-            <button className='btn btn-outline'>Connexion / Inscription</button>
-          </Link> :
-          <Link to={"/login"}>
-            <button className='btn btn-error btn-outline' onClick={() => localStorage.removeItem('logged')}>Déconnexion</button>
-          </Link>
-        }
+        <FaBell size={25} />
       </div>
     </div>
   )

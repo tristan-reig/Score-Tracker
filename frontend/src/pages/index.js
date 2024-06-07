@@ -4,7 +4,5 @@ export { default as League } from './League';
 export { default as Search } from './Search';
 export { default as Rugby } from './Rugby';
 export { default as Football } from './Football';
-export { default as Valorant } from './Valorant';
-export { default as Login } from './Login';
 
 export { default as Test } from './Test';

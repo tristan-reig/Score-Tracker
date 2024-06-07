@@ -3,14 +3,11 @@ import axios from 'axios';
 import cors from 'cors';
 import { parse } from 'node-html-parser';
 import he from 'he';
-import UserModel from "./model.js"
-import mongoose from "mongoose"
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-mongoose.connect("mongodb://127.0.0.1:27017/ScoreTracker");
-
+ 
 const optionsPanda = {
   method: 'GET',
   headers: {
@@ -18,30 +15,6 @@ const optionsPanda = {
     authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes',
   },
 };
-
-// User Routes
-
-app.post("/login", (req, res) => {
-  const {email, password} = req.body;
-  UserModel.findOne({email : email})
-  .then(user => {
-    if(user) {
-      if(user.password === password){
-        res.json("Success")
-      }else{
-        res.json("The password is incorrect")
-      }
-    }else{
-      res.json("No record existed")
-    }
-  })
-})
-
-app.post("/register", (req, res) => {
-  UserModel.create(req.body)
-  .then(users => res.json(users))
-  .catch(err => res.json(err))
-})
 
 // Rugby Routes
 
@@ -230,15 +203,6 @@ app.get('/football/premier-league/teams', async (req, res) => {
   })
   res.json(resp);
 })
-
-// Valorant Routes
-
-app.get('/valorant/:leagueId/teams', async (req, res) => {
-  const teamTab = []
-  optionsPanda['url'] = `https://api.pandascore.co/series/${req.params.leagueId}/tournaments`
-  const response = await axios.request(optionsPanda);
-  res.json(response.data)
-});
 
 // League Routes
 

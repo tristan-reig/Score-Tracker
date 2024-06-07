@@ -1,7 +1,6 @@
 export { default as Bracket } from './Bracket';
 export { default as Carousel } from './Carousel';
 export { default as Footer } from './Footer';
-export { default as Hero } from './Hero';
 export { default as LeagueModal } from './LeagueModal';
 export { default as MatchRow } from './MatchRow';
 export { default as Navbar } from './Navbar';
