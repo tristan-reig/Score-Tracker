@@ -3,7 +3,6 @@ import logo from '../assets/logo.png'
 import { IoIosFootball } from "react-icons/io";
 import { CiFootball } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
-import { useState } from 'react';
 
 const Navbar = (props) => {
   return (
@@ -14,20 +13,20 @@ const Navbar = (props) => {
           <img src={logo} alt=""/>
         </a>
       </div>
-      <div className="navbar-center gap-4">
-        <button className='btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer' onClick={() => props.setCategory("league")}>
+      {props.homepage && (<div className="navbar-center gap-4">
+        <button className={`btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer ${props.category === "league" && "border-yellow-100"}`} onClick={() => props.category == "league" ? props.setCategory("") : props.setCategory("league")}>
           <img className='w-8' src={LoL} alt=""/>
           <p>League of Legends</p>
         </button>
-        <button className='btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer' onClick={() => props.setCategory("football")}>
+        <button className={`btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer ${props.category === "football" && "border-yellow-100"}`} onClick={() => props.category == "football" ? props.setCategory("") : props.setCategory("football")}>
           <IoIosFootball size={30} />
           <p>Football</p>
         </button>
-        <button className='btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer' onClick={() => props.setCategory("rugby")}>
+        <button className={`btn-outline flex border p-2 rounded-xl gap-2 items-center cursor-pointer ${props.category === "rugby" && "border-yellow-100"}`} onClick={() => props.category == "rugby" ? props.setCategory("") : props.setCategory("rugby")}>
           <CiFootball size={30} color='brown' />
           <p>Rugby</p>
         </button>
-      </div>
+      </div>)}
       <div className="navbar-end">
         <FaBell size={25} />
       </div>

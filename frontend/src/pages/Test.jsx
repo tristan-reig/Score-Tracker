@@ -1,13 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { RugbyField } from "../components";
 
 const Test = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3001/valorant/7385/teams');
+      const response = await axios.get('http://localhost:3001/rugby/challenge-cup/groups');
       setData(response.data);
     }
     fetchData();
@@ -22,7 +21,10 @@ const Test = () => {
   console.log(data)
 
   return (
-    <div>Fini</div>
+    <div className="flex">
+      hello
+      <img className="w-10 h-10" src="/src/assets/euro/Albanie.png" alt="" />
+    </div>
   );
 };
 

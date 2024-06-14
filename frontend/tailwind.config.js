@@ -15,6 +15,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        'blue1' : "#ffffff",
         'gold1' : "#5d4a1f",
         'gold2' : "#9f7928",
         'gold3' : "#da9100",

@@ -3,12 +3,12 @@ import {Layout, Home, Test, Search, Rugby, League, Football} from "./pages";
 import { useState } from "react";
 
 export default function App() {
-  const [category, setCategory] = useState('league');
+  const [category, setCategory] = useState('');
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout setCategory={setCategory} homePage={true} />}>
+        <Route path="/" element={<Layout setCategory={setCategory} homepage={true} category={category} />}>
           <Route index element={<Home category={category} />} />
         </Route>
         <Route path="/search" element={<Layout />}>

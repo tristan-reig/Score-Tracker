@@ -1,6 +1,6 @@
 import { Lec, Lck, Lfl, Superliga, PrimeLeague, TCL, 
   Top, ProD2, ChallengeCup, ChampionsCup,
-  Ligue1, PremierLeague,
+  Ligue1, PremierLeague, Euro
 } from "../assets/";
 
 export const homeData = [{
@@ -11,55 +11,48 @@ export const homeData = [{
   'img' : Lck,
   'link' : '/league/lck?id=293',
   'colors' : ['gray-500', 'purple-500'],
-  'tag' : 'league',
 }, {
   'img' : Lfl,
   'link' : '/league/lfl?id=4292',
   'colors' : ['amber-700', 'gray-400'],
-  'tag' : 'league',
 }, {
   'img' : Superliga,
   'link' : '/league/superliga?id=4213',
   'colors' : ['red-800', 'amber-500'],
-  'tag' : 'league',
 }, {
   'img' : PrimeLeague,
   'link' : '/league/prime-league?id=4302',
   'colors' : ['blue-500', 'gray-700', 'blue-500'],
-  'tag' : 'league',
 }, {
   'img' : TCL,
   'link' : '/league/tcl?id=1003',
   'colors' : ['red-600', 'cyan-800'],
-  'tag' : 'league',
 }, {
   'img' : Top,
   'link' : '/rugby/top14',
   'colors' : ['black'],
-  'tag' : 'league',
 }, {
   'img' : ProD2,
   'link' : '/rugby/prod2',
-  'colors' : ['[ffffff]'],
-  'tag' : 'league',
+  'colors' : [],
 }, {
   'img' : ChampionsCup,
   'link' : '/rugby/champions-cup',
   'colors' : ['blue-600', 'blue-100'],
-  'tag' : 'league',
 }, {
   'img' : ChallengeCup,
   'link' : '/rugby/challenge-cup',
   'colors' : ['amber-950', 'lime-600'],
-  'tag' : 'league',
 }, {
   'img' : Ligue1,
   'link' : '/football/ligue1',
   'colors' : ['blue-950'],
-  'tag' : 'league',
 }, {
   'img' : PremierLeague,
   'link' : '/football/premier-league',
   'colors' : ['gray-100'],
-  'tag' : 'league',
+},{
+  'img' : Euro,
+  'link' : '/football/euro2024',
+  'colors' : ['blue-700'],
 }]

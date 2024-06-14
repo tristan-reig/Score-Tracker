@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef } from 'react'
 import { LuSwords } from 'react-icons/lu'
 import { FaCoins } from 'react-icons/fa6'
 import { TbTower } from "react-icons/tb";
@@ -6,7 +6,7 @@ import { GiSpikedDragonHead } from "react-icons/gi";
 import { Nashor, Champ } from '../assets'
 import axios from 'axios';
 
-const Modal = React.forwardRef((props, ref) => {
+const Modal = forwardRef((props, ref) => {
   const [data, setData] = useState(null);
   const [isHovered, setIsHovered] = useState(false)
 
@@ -52,7 +52,7 @@ const Modal = React.forwardRef((props, ref) => {
         const [val1, val2, val3] = val.split('/').map(Number);
         return [acc[0] + val1, acc[1] + val2, acc[2] + val3];
     }, [0, 0, 0]);
-  };
+  }
 
   if (!data) {
     return <div>Attente</div>
@@ -153,5 +153,7 @@ const Modal = React.forwardRef((props, ref) => {
     </dialog>
   )
 })
+
+Modal.displayName = "Modal"
 
 export default Modal

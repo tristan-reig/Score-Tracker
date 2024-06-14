@@ -177,8 +177,8 @@ app.get('/football/ligue1/matches', async (req, res) => {
   const root = parse(response.data)
   var currentDay = root.querySelector('.calendar-widget-day').innerText
   root.querySelectorAll('.calendarTeamNameDesktop').map((team, index) => {
-    index % 2 === 0 ? homeTab.push([he.decode(team.innerText.trim()), `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')]) : 
-    awayTab.push([he.decode(team.innerText.trim()), `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')])
+    index % 2 === 0 ? homeTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')]) : 
+    awayTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')])
   })
   root.querySelectorAll('.match-result').map(match => {
     var day = match.parentNode.previousElementSibling.innerHTML
@@ -200,6 +200,17 @@ app.get('/football/premier-league/teams', async (req, res) => {
   const root = parse(response.data);
   root.querySelectorAll(".club-card-wrapper").map(container => {
     resp[container.querySelector('.club-card__name').innerText] = container.querySelector('.club-card__badge').childNodes[1].childNodes[1].attributes.src;
+  })
+  res.json(resp);
+})
+
+app.get('/football/euro2024/teams', async (req, res) => {
+  const resp = {};
+  const response = await axios.get("https://fr.uefa.com/euro2024/teams/");
+  const root = parse(response.data);
+  root.querySelector(".teams-overview_group").querySelectorAll('.team').map(team => {
+    var name = he.decode(team.innerText.trim());
+    resp[name] = `../src/assets/euro/${name}.png`;
   })
   res.json(resp);
 })

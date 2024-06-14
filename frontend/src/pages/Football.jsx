@@ -16,7 +16,7 @@ const Ligue1 = () => {
       try {
         var response = await axios.request(`http://localhost:3001/football/${route.pathname.split('/')[2]}/teams`);
         setDataTeams(response.data);
-        response = await axios.request(`http://localhost:3001/football/${route.pathname.split('/')[2]}/standings`);
+        response = await axios.request(`http://localhost:3001/rugby/${route.pathname.split('/')[2]}/${route.pathname.includes('euro2024') ? 'groups' : 'standings'}`);
         setDataStandings(response.data);
         response = await axios.request(`http://localhost:3001/football/${route.pathname.split('/')[2]}/matches`);
         setDataMatches(response.data);
@@ -26,7 +26,7 @@ const Ligue1 = () => {
       }
     }
     fetchData()
-  },[]);
+  },[route.pathname]);
 
   console.log(dataMatches)
 

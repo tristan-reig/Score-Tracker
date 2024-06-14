@@ -6,7 +6,7 @@ const Layout = (props) => {
   return (
     <>
       <header>
-          <Navbar setCategory={props.setCategory} />
+          <Navbar setCategory={props.setCategory} homepage={props.homepage} category={props.category} />
       </header>
       <Outlet />
       <footer>
