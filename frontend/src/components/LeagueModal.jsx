@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import { useEffect, useState, forwardRef } from 'react'
 import { LuSwords } from 'react-icons/lu'
 import { FaCoins } from 'react-icons/fa6'
@@ -13,7 +14,7 @@ const Modal = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/league/${props.compName}/${props.season}/details?day=${props.day}&match=${props.matchIndex}`)
+        const response = await axios.get(`${API_URL}/league/${props.compName}/${props.season}/details?day=${props.day}&match=${props.matchIndex}`)
         setData(response.data);
       } catch (error) {
         console.log(error);

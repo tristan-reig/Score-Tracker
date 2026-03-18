@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import { useState, useEffect } from "react"
 import axios from "axios";
 
@@ -6,7 +7,7 @@ const MatchRow = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/pastMaches?id=${props.id}&index=${props.index + 1}`);
+        const response = await axios.get(`${API_URL}/pastMaches?id=${props.id}&index=${props.index + 1}`);
         setDataMatch(response.data.message[0]);
       } catch (error) {
         console.log(error)

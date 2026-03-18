@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
@@ -5,7 +6,7 @@ const Pagination = (props) => {
   var route = useLocation()
 
   const switchPage = async (index) => {
-    var response = await axios.get(`http://localhost:3001/rugby/${route.pathname.split('/')[2]}/matches?week=${index + 1}`);
+    var response = await axios.get(`${API_URL}/rugby/${route.pathname.split('/')[2]}/matches?week=${index + 1}`);
     props.setDataMatches(response.data);
     props.setWeek(index + 1)
   }

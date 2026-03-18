@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
@@ -12,7 +13,7 @@ const optionsPanda = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    authorization: 'Bearer Cp6oCLvXNKWhRpgG-hl2J9eGviiUpGANvTOLm8_mejbH72Z3zes',
+    authorization: `Bearer ${process.env.PANDASCORE_API_KEY}`,
   },
 };
 

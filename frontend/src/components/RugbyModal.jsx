@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import RugbyField from './RugbyField';
@@ -8,7 +9,7 @@ const RugbyModal = React.forwardRef((props, ref) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`http://localhost:3001/rugby/top14/details?week=${props.week}&id=${props.id}`);
+        var response = await axios.get(`${API_URL}/rugby/top14/details?week=${props.week}&id=${props.id}`);
         setData(response.data)
         console.log('nouvelle requete')
       } catch (error) {

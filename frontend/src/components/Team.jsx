@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Roster from "./Roster"
@@ -11,7 +12,7 @@ const Team = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/search/team/${props.data.id}`);
+        const response = await axios.get(`${API_URL}/search/team/${props.data.id}`);
         setData(response.data.message);
       } catch (error) {
         console.log(error)

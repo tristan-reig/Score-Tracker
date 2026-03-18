@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import axios from "axios";
 import { useState, useEffect } from "react"
 import TBD from "../assets/TBD.png"
@@ -11,7 +12,7 @@ const Bracket = (props) => {
     const fetchData = async () => {
       try {
         setCases([15, 19, 26, 30, 17, 21, 1, 5, 24, 28, 8, 12])
-        var response = await axios.get(`http://localhost:3001/league/${props.bracketId}/bracket`)
+        var response = await axios.get(`${API_URL}/league/${props.bracketId}/bracket`)
         setdataBracket(response.data);
       } catch (error) {
         console.log(error)
