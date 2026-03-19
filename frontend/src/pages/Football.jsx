@@ -15,11 +15,11 @@ const Ligue1 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.request(`${API_URL}/football/${route.pathname.split('/')[2]}/teams`);
+        var response = await axios.get(`${API_URL}/football/${route.pathname.split('/')[2]}/teams`);
         setDataTeams(response.data);
-        response = await axios.request(`${API_URL}/football/${route.pathname.split('/')[2]}/...`);
+        response = await axios.get(`${API_URL}/football/${route.pathname.split('/')[2]}/standings`);
         setDataStandings(response.data);
-        response = await axios.request(`${API_URL}/football/${route.pathname.split('/')[2]}/matches`);
+        response = await axios.get(`${API_URL}/football/${route.pathname.split('/')[2]}/matches`);
         setDataMatches(response.data);
         setWeek(Object.keys(response.data)[0])
       } catch (error) {

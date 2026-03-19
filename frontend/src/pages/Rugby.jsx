@@ -22,9 +22,9 @@ const Rugby = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.request(`${API_URL}/rugby/${route.pathname.split('/')[2]}/teams`);
+        var response = await axios.get(`${API_URL}/rugby/${route.pathname.split('/')[2]}/teams`);
         setDataTeams(response.data);
-        response = await axios.request(`${API_URL}/rugby/${route.pathname.split('/')[2]}/${route.pathname.includes('cup') ? 'groups' : 'standings'}`);
+        response = await axios.get(`${API_URL}/rugby/${route.pathname.split('/')[2]}/${route.pathname.includes('cup') ? 'groups' : 'standings'}`);
         setDataStandings(response.data);
         response = await axios.get(`${API_URL}/rugby/${route.pathname.split('/')[2]}/matches`);
         setDataMatches(response.data);
