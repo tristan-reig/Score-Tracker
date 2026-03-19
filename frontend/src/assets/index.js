@@ -18,6 +18,5 @@ export { default as ProD2 } from './ProD2.png';
 
 export { default as Foot } from './foot-logo.png'
 export { default as BgFoot } from './Bg-Foot.jpg'
-export { default as Euro } from './Euro.png';
 export { default as Ligue1 } from './Ligue1.png';
 export { default as PremierLeague } from './PremierLeague.png';
