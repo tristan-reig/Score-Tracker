@@ -197,11 +197,6 @@ app.get('/football/ligue1/matches', asyncHandler(async (req, res) => {
   const week = response.data.matches[0]?.season?.currentMatchday ?? matchday;
   res.json({ [week]: { home: homeTab, away: awayTab, infos: infosTab } });
 }))
-```
-
-N'oublie pas d'ajouter la variable dans Railway → service backend → **Variables** :
-```
-FOOTBALL_API_KEY=b8828dfa98de4fe9a95b33c2c39d3339
 
 app.get('/football/premier-league/teams', asyncHandler(async (req, res) => {
   const resp = {};
