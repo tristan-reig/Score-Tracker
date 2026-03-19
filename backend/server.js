@@ -147,60 +147,61 @@ app.get('/rugby/:leagueName/details', asyncHandler(async (req, res) => {
 // Football Routes
 
 app.get('/football/ligue1/teams', asyncHandler(async (req, res) => {
+  const response = await axios.get(
+    'https://api.football-data.org/v4/competitions/FL1/teams',
+    { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_KEY } }
+  );
   const resp = {};
-  const response = await axios.get(`https://www.ligue1.fr/clubs/liste`);
-  const root = parse(response.data);
-  const cardTitles = root.querySelectorAll('.card-title');
-  const clubLogos = root.querySelectorAll('.ClubListPage-logo');
-  cardTitles.forEach((cardTitle, index) => {
-    const name = he.decode(cardTitle.innerHTML.trim());
-    const formattedName = name.toLowerCase().replace(/(^|\s)\S/g, (match) => match.toUpperCase());
-    const logoSrc = clubLogos[index].childNodes[1].attributes['data-src'];
-    const logoUrl = logoSrc ? "https://ligue1.fr" + logoSrc : null;
-    const color = root.querySelectorAll('.ClubListPage-card')[index].attributes.style.split(':')[1]
-    resp[formattedName] = [logoUrl, color];
+  response.data.teams.forEach(team => {
+    resp[team.shortName] = team.crest;
   });
   res.json(resp);
 }))
 
 app.get('/football/ligue1/standings', asyncHandler(async (req, res) => {
-  const resp = {}
-  var teamTab = []
-  const response = await axios.get('https://www.ligue1.fr/classement')
-  const root = parse(response.data)
-  root.querySelectorAll('.GeneralStats-row').map(team => {
-    teamTab.push(`https://www.ligue1.fr${team.querySelector('img').attributes['data-src']}`)
-    team.querySelectorAll('.GeneralStats-item').map((row, index) => {
-      [2, 3, 4, 5, 6].includes(index) && teamTab.push(row.innerText)
-    })
-    resp[he.decode(team.querySelector('.GeneralStats-item--club').childNodes[3].innerHTML)] = teamTab
-    teamTab = []
-  })
-  res.json(resp)
+  const response = await axios.get(
+    'https://api.football-data.org/v4/competitions/FL1/standings',
+    { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_KEY } }
+  );
+  const resp = {};
+  response.data.standings[0].table.forEach(entry => {
+    resp[entry.team.shortName] = [
+      entry.team.crest,
+      entry.points,
+      entry.playedGames,
+      entry.won,
+      entry.draw,
+      entry.lost,
+    ];
+  });
+  res.json(resp);
 }))
 
 app.get('/football/ligue1/matches', asyncHandler(async (req, res) => {
-  const [resp, matchDict, homeTab, awayTab, infosTab] = [{}, {}, [], [], []]
-  const response = await axios.get(req.query.week ? `https://www.ligue1.fr/calendrier-resultats?matchDay=${req.query.week}` : `https://www.ligue1.fr/calendrier-resultats`)
-  const root = parse(response.data)
-  var currentDay = root.querySelector('.calendar-widget-day').innerText
-  root.querySelectorAll('.calendarTeamNameDesktop').map((team, index) => {
-    index % 2 === 0 ? homeTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')]) :
-    awayTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')])
-  })
-  root.querySelectorAll('.match-result').map(match => {
-    var day = match.parentNode.previousElementSibling.innerHTML
-    var info = match.querySelector('.Calendar-clubResult').innerText.trim()
-    currentDay === day ? infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info]) :
-    infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info])
-    currentDay = day
-  })
-  matchDict["home"] = homeTab
-  matchDict["away"] = awayTab
-  matchDict["infos"] = infosTab
-  resp[root.querySelector('.Scorebar-journeyItem--active').innerText.trim().slice(1)] = matchDict
-  res.json(resp)
+  const matchday = req.query.week ?? '';
+  const url = matchday
+    ? `https://api.football-data.org/v4/competitions/FL1/matches?matchday=${matchday}`
+    : `https://api.football-data.org/v4/competitions/FL1/matches?status=SCHEDULED,LIVE,FINISHED&limit=10`;
+  const response = await axios.get(url, {
+    headers: { 'X-Auth-Token': process.env.FOOTBALL_API_KEY }
+  });
+  const homeTab = [], awayTab = [], infosTab = [];
+  response.data.matches.forEach(match => {
+    homeTab.push([match.homeTeam.shortName, match.homeTeam.crest]);
+    awayTab.push([match.awayTeam.shortName, match.awayTeam.crest]);
+    const score = match.status === 'FINISHED'
+      ? `${match.score.fullTime.home}-${match.score.fullTime.away}`
+      : match.utcDate.slice(11, 16);
+    infosTab.push([match.utcDate.slice(0, 10), score]);
+  });
+  const week = response.data.matches[0]?.season?.currentMatchday ?? matchday;
+  res.json({ [week]: { home: homeTab, away: awayTab, infos: infosTab } });
 }))
+```
+
+N'oublie pas d'ajouter la variable dans Railway → service backend → **Variables** :
+```
+FOOTBALL_API_KEY=b8828dfa98de4fe9a95b33c2c39d3339
 
 app.get('/football/premier-league/teams', asyncHandler(async (req, res) => {
   const resp = {};
