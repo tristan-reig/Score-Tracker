@@ -8,7 +8,11 @@ import he from 'he';
 const app = express();
 app.use(cors());
 app.use(express.json());
- 
+
+const asyncHandler = fn => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
 const optionsPanda = {
   method: 'GET',
   headers: {
@@ -19,7 +23,7 @@ const optionsPanda = {
 
 // Rugby Routes
 
-app.get('/rugby/:compName-cup/teams', async(req, res) => {
+app.get('/rugby/:compName-cup/teams', asyncHandler(async (req, res) => {
   const [resp, teamTab] = [{}, []]
   const response = await axios.get(`https://www.epcrugby.com/fr/${req.params.compName}-cup/clubs`)
   const root = parse(response.data)
@@ -27,9 +31,9 @@ app.get('/rugby/:compName-cup/teams', async(req, res) => {
     teamTab.push(resp[team.querySelector('img').attributes.alt] = team.querySelector('img').attributes.src)
   })
   res.json(resp)
-})
+}))
 
-app.get('/rugby/:compName-cup/groups', async(req, res) => {
+app.get('/rugby/:compName-cup/groups', asyncHandler(async (req, res) => {
   const [resp] = [{}]
   var [groupTab, teamTab] = [[], []]
   const response = await axios.get(`https://www.epcrugby.com/fr/${req.params.compName}-cup/matchs/poules`)
@@ -47,9 +51,9 @@ app.get('/rugby/:compName-cup/groups', async(req, res) => {
     groupTab = []
   })
   res.json(resp)
-})
+}))
 
-app.get('/rugby/:compName-cup/matches', async(req, res) => {
+app.get('/rugby/:compName-cup/matches', asyncHandler(async (req, res) => {
   const [resp, homeTab, awayTab, infosTab] = [{}, [], [], []]
   const response = await axios.get('https://www.epcrugby.com/fr/challenge-cup/matchs')
   const root = parse(response.data)
@@ -57,9 +61,9 @@ app.get('/rugby/:compName-cup/matches', async(req, res) => {
   resp["away"] = awayTab
   resp["infos"] = infosTab
   res.json(resp)
-})
+}))
 
-app.get('/rugby/:leagueName/teams', async(req, res) => {
+app.get('/rugby/:leagueName/teams', asyncHandler(async (req, res) => {
   const [resp, teamTab] = [{}, []]
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/clubs`)
   const root = parse(response.data)
@@ -67,9 +71,9 @@ app.get('/rugby/:leagueName/teams', async(req, res) => {
     teamTab.push(resp[team.attributes.alt] = team.attributes.src)
   })
   res.json(resp)
-})
+}))
 
-app.get('/rugby/:leagueName/standings', async(req, res) => {
+app.get('/rugby/:leagueName/standings', asyncHandler(async (req, res) => {
   var [resp, teamTab] = [{}, []]
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/classement`)
   const root = parse(response.data)
@@ -85,7 +89,7 @@ app.get('/rugby/:leagueName/standings', async(req, res) => {
     }
     root2.querySelectorAll('.tile').map(cupTeam => {
       var cupTeamName = cupTeam.childNodes[1].childNodes[1].childNodes[0].rawText
-      var compTeamName =  team.childNodes[1].innerText.trim()
+      var compTeamName = team.childNodes[1].innerText.trim()
       if (cupTeamName == compTeamName || cupTeamName.includes(compTeamName) || compTeamName.includes(cupTeamName) || compTeamName.replace(/[^A-Z]/g, '') === cupTeamName) {
         teamTab.push("Challenge Cup")
       }
@@ -95,9 +99,9 @@ app.get('/rugby/:leagueName/standings', async(req, res) => {
     teamTab = []
   })
   res.json(resp)
-})
+}))
 
-app.get('/rugby/:leagueName/matches', async(req, res) => {
+app.get('/rugby/:leagueName/matches', asyncHandler(async (req, res) => {
   const [resp, matchDict, homeTab, awayTab, infosTab] = [{}, {}, [], [], []]
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/calendrier-et-resultats/${req.query.week ? `2023-2024/j${req.query.week}` : ``}`)
   const root = parse(response.data)
@@ -123,10 +127,10 @@ app.get('/rugby/:leagueName/matches', async(req, res) => {
   matchDict["infos"] = infosTab
   resp[root.querySelector(".calendar-results__title").innerHTML.trim().split(' ')[1]] = matchDict
   res.json(resp)
-})
+}))
 
-app.get('/rugby/:leagueName/details', async(req, res) => {
-  const [resp , playerTab] = [{}, []];
+app.get('/rugby/:leagueName/details', asyncHandler(async (req, res) => {
+  const [resp, playerTab] = [{}, []];
   const response = await axios.get(`https://${req.params.leagueName}.lnr.fr/feuille-de-match/2023-2024/j${req.query.week}/${req.query.id}/compositions`)
   const root = parse(response.data);
   root.querySelectorAll('.player-pitch__name').map(player => playerTab.push(he.decode(player.childNodes[0].innerText + ' ' + player.childNodes[1].innerText)))
@@ -134,17 +138,16 @@ app.get('/rugby/:leagueName/details', async(req, res) => {
   resp["home"] = [req.query.id.split('-')[1], root.querySelectorAll('.player-pitch__jersey')[0].attributes.src]
   resp["away"] = [req.query.id.split('-')[2], root.querySelectorAll('.player-pitch__jersey')[15].attributes.src]
   res.json(resp);
-})
+}))
 
 // Football Routes
 
-app.get('/football/ligue1/teams', async (req, res) => {
+app.get('/football/ligue1/teams', asyncHandler(async (req, res) => {
   const resp = {};
   const response = await axios.get(`https://www.ligue1.fr/clubs/liste`);
   const root = parse(response.data);
   const cardTitles = root.querySelectorAll('.card-title');
   const clubLogos = root.querySelectorAll('.ClubListPage-logo');
-
   cardTitles.forEach((cardTitle, index) => {
     const name = he.decode(cardTitle.innerHTML.trim());
     const formattedName = name.toLowerCase().replace(/(^|\s)\S/g, (match) => match.toUpperCase());
@@ -154,9 +157,9 @@ app.get('/football/ligue1/teams', async (req, res) => {
     resp[formattedName] = [logoUrl, color];
   });
   res.json(resp);
-});
+}))
 
-app.get('/football/ligue1/standings', async (req, res) => {
+app.get('/football/ligue1/standings', asyncHandler(async (req, res) => {
   const resp = {}
   var teamTab = []
   const response = await axios.get('https://www.ligue1.fr/classement')
@@ -170,21 +173,21 @@ app.get('/football/ligue1/standings', async (req, res) => {
     teamTab = []
   })
   res.json(resp)
-})
+}))
 
-app.get('/football/ligue1/matches', async (req, res) => {
+app.get('/football/ligue1/matches', asyncHandler(async (req, res) => {
   const [resp, matchDict, homeTab, awayTab, infosTab] = [{}, {}, [], [], []]
   const response = await axios.get(req.query.week ? `https://www.ligue1.fr/calendrier-resultats?matchDay=${req.query.week}` : `https://www.ligue1.fr/calendrier-resultats`)
   const root = parse(response.data)
   var currentDay = root.querySelector('.calendar-widget-day').innerText
   root.querySelectorAll('.calendarTeamNameDesktop').map((team, index) => {
-    index % 2 === 0 ? homeTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')]) : 
+    index % 2 === 0 ? homeTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')]) :
     awayTab.push([name, `https://www.ligue1.fr${team.previousElementSibling.attributes.src}`.replace('mh=60&mw=60', 'mh=100&mw=100')])
   })
   root.querySelectorAll('.match-result').map(match => {
     var day = match.parentNode.previousElementSibling.innerHTML
     var info = match.querySelector('.Calendar-clubResult').innerText.trim()
-    currentDay === day ? infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info]) : 
+    currentDay === day ? infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info]) :
     infosTab.push([he.decode(currentDay.split(' ').slice(0, -1).join(' ')), info])
     currentDay = day
   })
@@ -193,9 +196,9 @@ app.get('/football/ligue1/matches', async (req, res) => {
   matchDict["infos"] = infosTab
   resp[root.querySelector('.Scorebar-journeyItem--active').innerText.trim().slice(1)] = matchDict
   res.json(resp)
-})
+}))
 
-app.get('/football/premier-league/teams', async (req, res) => {
+app.get('/football/premier-league/teams', asyncHandler(async (req, res) => {
   const resp = {};
   const response = await axios.get("https://www.premierleague.com/clubs");
   const root = parse(response.data);
@@ -203,9 +206,9 @@ app.get('/football/premier-league/teams', async (req, res) => {
     resp[container.querySelector('.club-card__name').innerText] = container.querySelector('.club-card__badge').childNodes[1].childNodes[1].attributes.src;
   })
   res.json(resp);
-})
+}))
 
-app.get('/football/euro2024/teams', async (req, res) => {
+app.get('/football/euro2024/teams', asyncHandler(async (req, res) => {
   const resp = {};
   const response = await axios.get("https://fr.uefa.com/euro2024/teams/");
   const root = parse(response.data);
@@ -214,29 +217,29 @@ app.get('/football/euro2024/teams', async (req, res) => {
     resp[name] = `../src/assets/euro/${name}.png`;
   })
   res.json(resp);
-})
+}))
 
 // League Routes
 
-app.get('/league/:leagueId/teams', async (req, res) => {
+app.get('/league/:leagueId/teams', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/leagues/${req.params.leagueId}/tournaments`
   const response = await axios.request(optionsPanda);
   res.json(response.data);
-});
+}))
 
-app.get('/league/:tournamentId/standings', async (req, res) => {
+app.get('/league/:tournamentId/standings', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/tournaments/${req.params.tournamentId}/standings`
   const response = await axios.request(optionsPanda);
   res.json(response.data);
-});
+}))
 
-app.get('/league/:tournamentId/matches', async (req, res) => {
+app.get('/league/:tournamentId/matches', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/tournaments/${req.params.tournamentId}/matches?sort=begin_at&page=1&per_page=100`
   const response = await axios.request(optionsPanda);
   res.json(response.data);
-});
+}))
 
-app.get('/league/:leagueName/:season/details', async (req, res) => {
+app.get('/league/:leagueName/:season/details', asyncHandler(async (req, res) => {
   const [resp, pickTab, banTab] = [{}, [], []];
   const matchNum = parseInt((req.query.day - 1) * 5) + parseInt(req.query.match);
   const week = Math.ceil(req.query.day / 2);
@@ -257,32 +260,38 @@ app.get('/league/:leagueName/:season/details', async (req, res) => {
   resp["pick"] = pickTab;
   resp["ban"] = banTab;
   res.json(resp);
-})
+}))
 
-app.get('/search/:query', async (req, res) => {
+app.get('/search/:query', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/teams/${req.params.query}`
   const response = await axios.request(optionsPanda);
-  res.json({message: response.data});
-});
+  res.json({ message: response.data });
+}))
 
-app.get('/search/team/:id', async (req, res) => {
+app.get('/search/team/:id', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/teams/${req.params.id}/leagues`
   const response = await axios.request(optionsPanda);
-  res.json({message: response.data});
-});
+  res.json({ message: response.data });
+}))
 
-app.get('/pastMaches', async (req, res) => {
+app.get('/pastMaches', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/matches/past?filter[opponent_id]=${req.query.id}&page=${req.query.index}&per_page=1`
   const response = await axios.request(optionsPanda);
-  res.json({message: response.data});
-});
+  res.json({ message: response.data });
+}))
 
-app.get('/league/:tournamentId/bracket', async (req, res) => {
+app.get('/league/:tournamentId/bracket', asyncHandler(async (req, res) => {
   optionsPanda['url'] = `https://api.pandascore.co/tournaments/${req.params.tournamentId}/brackets`
   const response = await axios.request(optionsPanda);
   res.json(response.data);
+}))
+
+app.use((err, req, res, next) => {
+  console.error(`[ERROR] ${req.method} ${req.path} →`, err.message);
+  res.status(err.response?.status ?? 500).json({ error: err.message });
 });
 
-app.listen(3001, () => {
-  console.log(`Serveur démarré`);
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur le port ${PORT}`);
 });
