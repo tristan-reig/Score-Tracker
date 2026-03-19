@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import { useState, useEffect } from "react";
 import Team from "../components/Team"
 import axios from 'axios';
@@ -13,7 +14,7 @@ const Search = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/search/${query}`);
+        const response = await axios.get(`${API_URL}/search/${query}`);
         setData(response.data);
       } catch (error) {
         console.log(error)

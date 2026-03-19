@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import axios from 'axios'
 import { useState, useEffect, useRef } from 'react'
 import TeamCard from '../components/TeamCard'
@@ -28,7 +29,7 @@ const League = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(`http://localhost:3001/league/${leagueId}/teams`)
+        var response = await axios.get(`${API_URL}/league/${leagueId}/teams`)
         if (response.data[0].name === "Playoffs") {
           selectedTournament = response.data[1]
           setBracketId(response.data[0].id)
@@ -37,9 +38,9 @@ const League = () => {
         }
         setTournament(selectedTournament);
         setDataTeams(selectedTournament.teams)
-        response = await axios.get(`http://localhost:3001/league/${selectedTournament.id}/standings`)
+        response = await axios.get(`${API_URL}/league/${selectedTournament.id}/standings`)
         setDataStandings(response.data)
-        response = await axios.get(`http://localhost:3001/league/${selectedTournament.id}/matches`)
+        response = await axios.get(`${API_URL}/league/${selectedTournament.id}/matches`)
         setDataMatches(response.data)
       } catch (error) {
         console.log(error)

@@ -1,3 +1,5 @@
+import { API_URL } from '../api';
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -6,7 +8,7 @@ const Test = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3001/rugby/challenge-cup/groups');
+      const response = await axios.get('${API_URL}/rugby/challenge-cup/groups');
       setData(response.data);
     }
     fetchData();

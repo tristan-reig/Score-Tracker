@@ -1,3 +1,4 @@
+import { API_URL } from '../api';
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom";
@@ -14,11 +15,11 @@ const Ligue1 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.request(`http://localhost:3001/football/${route.pathname.split('/')[2]}/teams`);
+        var response = await axios.request(`${API_URL}/football/${route.pathname.split('/')[2]}/teams`);
         setDataTeams(response.data);
-        response = await axios.request(`http://localhost:3001/rugby/${route.pathname.split('/')[2]}/${route.pathname.includes('euro2024') ? 'groups' : 'standings'}`);
+        response = await axios.request(`${API_URL}/rugby/${route.pathname.split('/')[2]}/${route.pathname.includes('euro2024') ? 'groups' : 'standings'}`);
         setDataStandings(response.data);
-        response = await axios.request(`http://localhost:3001/football/${route.pathname.split('/')[2]}/matches`);
+        response = await axios.request(`${API_URL}/football/${route.pathname.split('/')[2]}/matches`);
         setDataMatches(response.data);
         setWeek(Object.keys(response.data)[0])
       } catch (error) {
