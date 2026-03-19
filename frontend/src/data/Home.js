@@ -51,8 +51,4 @@ export const homeData = [{
   'img' : PremierLeague,
   'link' : '/football/premier-league',
   'colors' : ['gray-100'],
-},{
-  'img' : Euro,
-  'link' : '/football/euro2024',
-  'colors' : ['blue-700'],
 }]

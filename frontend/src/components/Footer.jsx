@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="footer items-center p-4 text-neutral-content bg-gray-900">
       <aside className="items-center grid-flow-col">
-        <p className="2xl:text-base">Copyright © {new Date().getFullYear()} - Skiifig</p>
+        <p className="2xl:text-base">Copyright © 2024 - Tristan Reig</p>
       </aside>
       <nav className="grid-flow-col gap-4 place-self-center justify-self-end align-center flex items-center">
         <h4 className="mt-1 2xl:text-lg 2xl:mt-0">Powered by</h4>

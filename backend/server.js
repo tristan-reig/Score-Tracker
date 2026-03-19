@@ -210,15 +210,44 @@ app.get('/football/premier-league/teams', asyncHandler(async (req, res) => {
   res.json(resp);
 }))
 
-app.get('/football/euro2024/teams', asyncHandler(async (req, res) => {
+app.get('/football/premier-league/standings', asyncHandler(async (req, res) => {
+  const response = await axios.get(
+    'https://api.football-data.org/v4/competitions/PL/standings',
+    { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_KEY } }
+  );
   const resp = {};
-  const response = await axios.get("https://fr.uefa.com/euro2024/teams/");
-  const root = parse(response.data);
-  root.querySelector(".teams-overview_group").querySelectorAll('.team').map(team => {
-    var name = he.decode(team.innerText.trim());
-    resp[name] = `../src/assets/euro/${name}.png`;
-  })
+  response.data.standings[0].table.forEach(entry => {
+    resp[entry.team.shortName] = [
+      entry.team.crest,
+      entry.points,
+      entry.playedGames,
+      entry.won,
+      entry.draw,
+      entry.lost,
+    ];
+  });
   res.json(resp);
+}))
+
+app.get('/football/premier-league/matches', asyncHandler(async (req, res) => {
+  const matchday = req.query.week ?? '';
+  const url = matchday
+    ? `https://api.football-data.org/v4/competitions/PL/matches?matchday=${matchday}`
+    : `https://api.football-data.org/v4/competitions/PL/matches?status=SCHEDULED,LIVE,FINISHED&limit=10`;
+  const response = await axios.get(url, {
+    headers: { 'X-Auth-Token': process.env.FOOTBALL_API_KEY }
+  });
+  const homeTab = [], awayTab = [], infosTab = [];
+  response.data.matches.forEach(match => {
+    homeTab.push([match.homeTeam.shortName, match.homeTeam.crest]);
+    awayTab.push([match.awayTeam.shortName, match.awayTeam.crest]);
+    const score = match.status === 'FINISHED'
+      ? `${match.score.fullTime.home}-${match.score.fullTime.away}`
+      : match.utcDate.slice(11, 16);
+    infosTab.push([match.utcDate.slice(0, 10), score]);
+  });
+  const week = response.data.matches[0]?.season?.currentMatchday ?? matchday;
+  res.json({ [week]: { home: homeTab, away: awayTab, infos: infosTab } });
 }))
 
 // League Routes
