@@ -199,12 +199,14 @@ app.get('/football/ligue1/matches', asyncHandler(async (req, res) => {
 }))
 
 app.get('/football/premier-league/teams', asyncHandler(async (req, res) => {
+  const response = await axios.get(
+    'https://api.football-data.org/v4/competitions/PL/teams',
+    { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_KEY } }
+  );
   const resp = {};
-  const response = await axios.get("https://www.premierleague.com/clubs");
-  const root = parse(response.data);
-  root.querySelectorAll(".club-card-wrapper").map(container => {
-    resp[container.querySelector('.club-card__name').innerText] = container.querySelector('.club-card__badge').childNodes[1].childNodes[1].attributes.src;
-  })
+  response.data.teams.forEach(team => {
+    resp[team.shortName] = team.crest;
+  });
   res.json(resp);
 }))
 
